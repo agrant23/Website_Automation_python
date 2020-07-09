@@ -10,6 +10,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import unittest
 import random
+import string
 import time
 
 class Test_Password_Count(unittest.TestCase):                  
@@ -87,9 +88,7 @@ class Test_Password_Count(unittest.TestCase):
         chars_not_in_password = ['\n','\t','\r','\x0b','\x0c']
         for char in chars_not_in_password:
             password_characters = string.printable.replace(char,'')
-        
-        password = ""
-        
+                
         char_1 = ''
         char_2 = ''
         char_3 = ''
@@ -100,7 +99,6 @@ class Test_Password_Count(unittest.TestCase):
         char_8 = ''
 
         char_1 = random.choice(password_characters)
-        password = password + char_1
 
         new_password_field = self.driver.find_element_by_id('cpwd-password')
         new_password_field.send_keys(char_1)  
@@ -117,7 +115,6 @@ class Test_Password_Count(unittest.TestCase):
 
         char_2 = random.choice(password_characters)
         new_password_field.send_keys(char_2)
-        password = password + char_2 
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc) 
@@ -126,7 +123,6 @@ class Test_Password_Count(unittest.TestCase):
 
         char_3 = random.choice(password_characters)
         new_password_field.send_keys(char_3)
-        password = password + char_3
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
@@ -135,14 +131,12 @@ class Test_Password_Count(unittest.TestCase):
 
         char_4 = random.choice(password_characters)
         new_password_field.send_keys(char_4)
-        password = password + char_4
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
 
         char_5 = random.choice(password_characters)
         new_password_field.send_keys(char_5)
-        password = password + char_5
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
@@ -151,7 +145,6 @@ class Test_Password_Count(unittest.TestCase):
 
         char_6 = random.choice(password_characters)
         new_password_field.send_keys(char_6)
-        password = password + char_6
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
@@ -160,7 +153,6 @@ class Test_Password_Count(unittest.TestCase):
 
         char_7 = random.choice(password_characters)
         new_password_field.send_keys(char_7)
-        password = password + char_7
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  

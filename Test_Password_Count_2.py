@@ -80,7 +80,7 @@ class Test_Password_Count(unittest.TestCase):
         EC.element_to_be_clickable(change_password_loc))
         change_password.click()
 
-    def test_password_character_min(self):                          #if only doing one test need to use run_test_ not just test_ 
+    def test_password_character_min(self):                           
         actions = ActionChains(self.driver)
         action_tab = actions.send_keys(Keys.TAB)
         wait = WebDriverWait(self.driver, 10)
@@ -89,19 +89,18 @@ class Test_Password_Count(unittest.TestCase):
         for char in chars_not_in_password:
             password_characters = string.printable.replace(char,'')
                 
-        char_1 = ''
-        char_2 = ''
-        char_3 = ''
-        char_4 = ''
-        char_5 = ''
-        char_6 = ''
-        char_7 = ''
-        char_8 = ''
+        password_char_1 = ''
+        password_char_2 = ''
+        password_char_3 = ''
+        password_char_4 = ''
+        password_char_5 = ''
+        password_char_6 = ''
+        password_char_7 = ''
 
-        char_1 = random.choice(password_characters)
+        password_char_1 = random.choice(password_characters)
 
         new_password_field = self.driver.find_element_by_id('cpwd-password')
-        new_password_field.send_keys(char_1)  
+        new_password_field.send_keys(password_char_1)  
 
         action_tab.perform()    #this is needed to see the correct/current password status message
         new_password_field.click()
@@ -109,50 +108,50 @@ class Test_Password_Count(unittest.TestCase):
         password_status_loc = (By.ID,'cpwd-error-password')
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
-        password_status_element = self.driver.find_element(*password_status_loc) #is this line needed here and through char_6
+        password_status_element = self.driver.find_element(*password_status_loc) #is this line needed here and through char_7
 
         self.assertEqual(password_status_element.text,"Your password is too easy to guess, try making it longer.")
 
-        char_2 = random.choice(password_characters)
-        new_password_field.send_keys(char_2)
+        password_char_2 = random.choice(password_characters)
+        new_password_field.send_keys(password_char_2)
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc) 
 
         self.assertEqual(password_status_element.text,"Your password is too easy to guess, try making it longer.")
 
-        char_3 = random.choice(password_characters)
-        new_password_field.send_keys(char_3)
+        password_char_3 = random.choice(password_characters)
+        new_password_field.send_keys(password_char_3)
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
 
         self.assertEqual(password_status_element.text,"Your password is too easy to guess, try making it longer.")
 
-        char_4 = random.choice(password_characters)
-        new_password_field.send_keys(char_4)
+        password_char_4 = random.choice(password_characters)
+        new_password_field.send_keys(password_char_4)
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
 
-        char_5 = random.choice(password_characters)
-        new_password_field.send_keys(char_5)
-        password_status_element = wait.until(
-            EC.presence_of_element_located(password_status_loc))
-        password_status_element = self.driver.find_element(*password_status_loc)  
-
-        self.assertEqual(password_status_element.text,"Your password is too easy to guess, try making it longer.")
-
-        char_6 = random.choice(password_characters)
-        new_password_field.send_keys(char_6)
+        password_char_5 = random.choice(password_characters)
+        new_password_field.send_keys(password_char_5)
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  
 
         self.assertEqual(password_status_element.text,"Your password is too easy to guess, try making it longer.")
 
-        char_7 = random.choice(password_characters)
-        new_password_field.send_keys(char_7)
+        password_char_6 = random.choice(password_characters)
+        new_password_field.send_keys(password_char_6)
+        password_status_element = wait.until(
+            EC.presence_of_element_located(password_status_loc))
+        password_status_element = self.driver.find_element(*password_status_loc)  
+
+        self.assertEqual(password_status_element.text,"Your password is too easy to guess, try making it longer.")
+
+        password_char_7 = random.choice(password_characters)
+        new_password_field.send_keys(password_char_7)
         password_status_element = wait.until(
             EC.presence_of_element_located(password_status_loc))
         password_status_element = self.driver.find_element(*password_status_loc)  

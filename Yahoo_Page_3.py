@@ -9,10 +9,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 
-#change
-#change2
-#change3
-#change4
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 options1 = Options()
 options1.add_argument('load-extension=' + path_to_extension)

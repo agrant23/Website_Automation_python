@@ -13,6 +13,10 @@ path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 options1 = Options()
 options1.add_argument('load-extension=' + path_to_extension)
 
+#change
+#change 2
+
+
 class Yahoo_Page_3():
 
     def __init__(self,driver):

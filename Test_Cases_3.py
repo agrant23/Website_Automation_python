@@ -21,39 +21,41 @@ class HomePageSetup(unittest.TestCase):
     def setUp(self):
 
         self.driver = webdriver.Chrome(options=options1)       #options1 is a global variable in Yahoo_Page_3   
-        yahoo_page = Yahoo_Page_3(self.driver)
+        self.yahoo_page = Yahoo_Page_3(self.driver)
+        yahoo_page = self.yahoo_page
 
-        yahoo_page.load_website("https://www.yahoo.com",self.driver)
+        yahoo_page.load_website("https://www.yahoo.com")
                 
         #after loading an extension it opens a new tab, so I tab back to yahoo tab
-        yahoo_page.switch_to_tab(self.driver)
+        yahoo_page.switch_to_tab()
 
-        yahoo_page.sign_in_button_click(self.driver)
+        yahoo_page.sign_in_button()
 
-        user_name_field = yahoo_page.get_username_field(self.driver)
-        yahoo_page.input_string(Secure.yahoo_username, user_name_field)
+        yahoo_page.input_username(Secure.yahoo_username)
+        #yahoo_page.input_string(Secure.yahoo_username)
+        
 
-        user_name_button = yahoo_page.username_next_button(self.driver)
+        user_name_button = yahoo_page.username_next_button()
         yahoo_page.click(user_name_button)
 
-        password_field = yahoo_page.get_password_field(self.driver)
+        password_field = yahoo_page.get_password_field()
         yahoo_page.input_string(Secure.yahoo_password,password_field)
 
-        password_button = yahoo_page.password_next_button(self.driver)
+        password_button = yahoo_page.password_next_button()
         yahoo_page.click(password_button)
 
-        yahoo_page.tab_off_pop_up(self.driver)
+        yahoo_page.tab_off_pop_up()
 
-        profile_menu = yahoo_page.profile_menu(self.driver)
+        profile_menu = yahoo_page.profile_menu()
         yahoo_page.click(profile_menu)
 
-        profile_settings = yahoo_page.profile_menu_settings(self.driver)
+        profile_settings = yahoo_page.profile_menu_settings()
         yahoo_page.click(profile_settings)
 
-        account_secuirty_tab = yahoo_page.account_security_tab(self.driver)
+        account_secuirty_tab = yahoo_page.account_security_tab()
         yahoo_page.click(account_secuirty_tab)
 
-        change_password = yahoo_page.change_password_link(self.driver)
+        change_password = yahoo_page.change_password_link()
         yahoo_page.click(change_password)
 
 #class error_message_tests(HomePageSetup):
@@ -70,16 +72,16 @@ class HomePageSetup(unittest.TestCase):
         -When a password that is too short is entered the error text explaining this appears
         """
 
-        yahoo_page = Yahoo_Page_3(self.driver)
+        yahoo_page = self.yahoo_page
         
         short_password = self.random_password_generator(6)
-        new_password_field = yahoo_page.get_new_password_field(self.driver)
+        new_password_field = yahoo_page.get_new_password_field()
         yahoo_page.input_string(short_password,new_password_field)
         
         #tab to the Confirm Password field, to load the error message
-        yahoo_page.tab_to_next_field(self.driver)    
+        yahoo_page.tab_to_next_field()    
 
-        password_status = yahoo_page.password_error_message(self.driver)
+        password_status = yahoo_page.password_error_message()
 
         self.assertEqual(password_status.get_attribute('data-error'),"WEAK_PASSWORD")  
         self.assertEqual(password_status.text,"Your password is too easy to guess, try making it longer.")
@@ -97,15 +99,15 @@ class HomePageSetup(unittest.TestCase):
         -When a password that meets the required lenght is entered there is no error text
         """
         
-        yahoo_page = Yahoo_Page_3(self.driver)
+        yahoo_page = self.yahoo_page
         
         long_password = self.random_password_generator(8)
-        new_password_field = yahoo_page.get_new_password_field(self.driver)
+        new_password_field = yahoo_page.get_new_password_field()
         yahoo_page.input_string(long_password,new_password_field)
         
-        yahoo_page.tab_to_next_field(self.driver) 
+        yahoo_page.tab_to_next_field() 
         
-        password_status = yahoo_page.password_error_message(self.driver)
+        password_status = yahoo_page.password_error_message()
 
         self.assertEqual(password_status.get_attribute('data-error'),"")
         self.assertEqual(password_status.text,"")

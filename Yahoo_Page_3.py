@@ -57,11 +57,6 @@ class Yahoo_Page_3():
         
     def input_password_field(self,passWord):    self.password_field().send_keys(passWord)
 
-    def click_new_password_field(self):
-        new_password_field_loc = (By.ID,'cpwd-password')
-        wait(self.driver,15).until(EC.element_to_be_clickable(new_password_field_loc))
-        self.driver.find_element(*new_password_field_loc).click()
-
     def new_password_field(self):
         new_password_field_loc = (By.ID,'cpwd-password')
         wait(self.driver,15).until(EC.presence_of_element_located(new_password_field_loc))

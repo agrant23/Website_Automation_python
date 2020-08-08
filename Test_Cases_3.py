@@ -47,40 +47,39 @@ class HomePageSetup(unittest.TestCase):
 
     def test_short_password_error_message(self):
         """ 
-        Confirm the password is one character short of the clients required password length
-        for the error data criteria. Confirm the data for the error exists when the password
-        is entered and the resulting error text matches the output text. 
+        Confirm the entered password is one character short of required minimum length.
+        Confirm error data pops up when the short password is entered.
+        Confirm the resulting error text matches the current sentence/wording. 
 
         acceptance criteria   
         --------------------
-        -When a password that is too short is entered data error exists
-        -When a password that is too short is entered the error text explaining this appears
+        -When a password that is too short is entered data error exists,
+        the error text appears and is the same as it is now 08/08/2020
         """
 
         yahoo_page = self.yahoo_page
 
-        #yahoo_page.click_new_password_field()
         yahoo_page.input_new_password_field(self.random_password(6))
         
         #tab to the Confirm Password field, to load the error message
         yahoo_page.tab_to_next_field()    
 
-        password_status = yahoo_page.password_error_message()
+        #password_status = yahoo_page.password_error_message()
 
-        self.assertEqual(password_status.get_attribute('data-error'),"WEAK_PASSWORD")  
-        self.assertEqual(password_status.text,"Your password is too easy to guess, try making it longer.")
+        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"WEAK_PASSWORD")  
+        self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess, try making it longer.")
 
 
     def test_long_password_error_message(self):
         """ 
-        Confirm the password is at the clients required password length for the error data criteria.
-        Confirm the data for the error does not exists when the password is entered and there
-        is no resulting error text.
+        Confirm the entered password is one character longer than the required minimum length.
+        Confirm error data does not pop up when the long password is entered.
+        Confirm there is no error text popping up 
 
         acceptance criteria   
         --------------------
-        -When a password that meets the required length is entered data error does not exists
-        -When a password that meets the required lenght is entered there is no error text
+        -When a password that is too long is entered data error does not exist and
+        the error text does not appears
         """
         
         yahoo_page = self.yahoo_page
@@ -90,10 +89,10 @@ class HomePageSetup(unittest.TestCase):
         
         yahoo_page.tab_to_next_field() 
         
-        password_status = yahoo_page.password_error_message()
+        #password_status = yahoo_page.password_error_message()
 
-        self.assertEqual(password_status.get_attribute('data-error'),"")
-        self.assertEqual(password_status.text,"")
+        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")
+        self.assertEqual(yahoo_page.password_error_message().text,"")
 
     def tearDown(self):
         self.driver.quit()

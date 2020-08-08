@@ -17,9 +17,9 @@ options1.add_argument('load-extension=' + path_to_extension)
 class Yahoo_Page_3():
 
     def __init__(self,driver):
-        self.driver = driver
+        self.driver = driver   
 
-    def load_website(self,home_url):     self.driver.get(home_url)     
+    def load_website(self,home_url):     self.driver.get(home_url)  
 
     #after loading an extension it opens a new tab, so I tab back to yahoo tab
     def switch_to_tab(self):     
@@ -29,17 +29,17 @@ class Yahoo_Page_3():
 
     #Buttons
 
-    def sign_in_button(self):
+    def click_sign_in_button(self):
         sign_in_button_loc = (By.ID,"header-signin-link")
         wait(self.driver,15).until(EC.element_to_be_clickable(sign_in_button_loc))
         self.driver.find_element(*sign_in_button_loc).click()
     
-    def username_next_button(self):      
+    def click_username_next_button(self):      
         username_next_button_loc = (By.ID,"login-signin") 
         wait(self.driver, 15).until(EC.element_to_be_clickable(username_next_button_loc))
         self.driver.find_element(*username_next_button_loc).click()
         
-    def password_next_button(self):  self.driver.find_element_by_class_name("button-container").find_element_by_id('login-signin').click()
+    def click_password_next_button(self):  self.driver.find_element_by_class_name("button-container").find_element_by_id('login-signin').click()
     
     #Fields
 
@@ -48,20 +48,26 @@ class Yahoo_Page_3():
         wait(self.driver, 15).until(EC.presence_of_element_located(username_field_loc))
         return self.driver.find_element(*username_field_loc)      
 
-    def get_password_field(self):
+    def input_username_field(self,userName):     self.username_field().send_keys(userName)
+
+    def password_field(self):
         password_field_loc = (By.ID,"login-passwd")
         wait(self.driver,15).until(EC.presence_of_element_located(password_field_loc))
-        self.driver.find_element(*password_field_loc).click()
+        return self.driver.find_element(*password_field_loc)
         
-    def get_new_password_field(self):
+    def input_password_field(self,passWord):    self.password_field().send_keys(passWord)
+
+    def click_new_password_field(self):
+        new_password_field_loc = (By.ID,'cpwd-password')
+        wait(self.driver,15).until(EC.element_to_be_clickable(new_password_field_loc))
+        self.driver.find_element(*new_password_field_loc).click()
+
+    def new_password_field(self):
         new_password_field_loc = (By.ID,'cpwd-password')
         wait(self.driver,15).until(EC.presence_of_element_located(new_password_field_loc))
-
-
-    #Inputs
-
-    def input_username(self,my_string):     self.username_field().send_keys(my_string)   
-
+        return self.driver.find_element(*new_password_field_loc)
+    
+    def input_new_password_field(self,newPassWord):   self.new_password_field().send_keys(newPassWord)
 
     #Popups
 
@@ -73,27 +79,26 @@ class Yahoo_Page_3():
 
     #Drop Downs
 
-    def profile_menu(self):  return self.driver.find_element_by_id('header-profile-menu')
+    def click_profile_menu(self):  self.driver.find_element_by_id('header-profile-menu').click()
 
-    def profile_menu_settings(self):
+    def click_profile_menu_settings(self):
         setting_link_loc = (By.ID,'profile-settings-link')
-        setting_link = wait(self.driver,15).until(EC.element_to_be_clickable(setting_link_loc))
-        setting_link = self.driver.find_element(*setting_link_loc)
-        return setting_link
+        wait(self.driver,15).until(EC.element_to_be_clickable(setting_link_loc))
+        self.driver.find_element(*setting_link_loc).click()
     
     #Tabs
 
-    def account_security_tab(self):       
+    def click_account_security_tab(self):       
         account_security_loc = (By.PARTIAL_LINK_TEXT,'Account Security')
-        account_security = wait(self.driver,15).until(EC.presence_of_element_located(account_security_loc))
-        return account_security
+        wait(self.driver,15).until(EC.presence_of_element_located(account_security_loc))
+        self.driver.find_element(*account_security_loc).click()
     
     #Links
 
-    def change_password_link(self):
+    def click_change_password_link(self):
         change_password_loc = (By.PARTIAL_LINK_TEXT,'Change password')
-        change_password = wait(self.driver,15).until(EC.element_to_be_clickable(change_password_loc))
-        return change_password
+        wait(self.driver,15).until(EC.element_to_be_clickable(change_password_loc))
+        self.driver.find_element(*change_password_loc).click()
 
     #Action Keys
 

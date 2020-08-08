@@ -10,13 +10,12 @@ from Yahoo_Page_3 import *
 
 class HomePageSetup(unittest.TestCase):
 
-    def random_password_generator(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_name
+    def random_password(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_name
         excluded_password_characters = ['\n','\t','\r','\x0b','\x0c']  
         for char in excluded_password_characters:
             password_characters = string.printable.replace(char,'')
-        password = ''.join(random.choice(password_characters) for x in range(password_len))
+            password = ''.join(random.choice(password_characters) for x in range(password_len))
         return password
-
 
     def setUp(self):
 
@@ -29,34 +28,20 @@ class HomePageSetup(unittest.TestCase):
         #after loading an extension it opens a new tab, so I tab back to yahoo tab
         yahoo_page.switch_to_tab()
 
-        yahoo_page.sign_in_button()
+        yahoo_page.click_sign_in_button()
+        yahoo_page.input_username_field(Secure.yahoo_username) 
+        yahoo_page.click_username_next_button()
 
-        yahoo_page.input_username(Secure.yahoo_username)
-        #yahoo_page.input_string(Secure.yahoo_username)
-        
-
-        user_name_button = yahoo_page.username_next_button()
-        yahoo_page.click(user_name_button)
-
-        password_field = yahoo_page.get_password_field()
-        yahoo_page.input_string(Secure.yahoo_password,password_field)
-
-        password_button = yahoo_page.password_next_button()
-        yahoo_page.click(password_button)
+        yahoo_page.input_password_field(Secure.yahoo_password)
+        yahoo_page.click_password_next_button()
 
         yahoo_page.tab_off_pop_up()
 
-        profile_menu = yahoo_page.profile_menu()
-        yahoo_page.click(profile_menu)
+        yahoo_page.click_profile_menu()
+        yahoo_page.click_profile_menu_settings()
+        yahoo_page.click_account_security_tab()
 
-        profile_settings = yahoo_page.profile_menu_settings()
-        yahoo_page.click(profile_settings)
-
-        account_secuirty_tab = yahoo_page.account_security_tab()
-        yahoo_page.click(account_secuirty_tab)
-
-        change_password = yahoo_page.change_password_link()
-        yahoo_page.click(change_password)
+        yahoo_page.click_change_password_link()
 
 #class error_message_tests(HomePageSetup):
 
@@ -73,10 +58,9 @@ class HomePageSetup(unittest.TestCase):
         """
 
         yahoo_page = self.yahoo_page
-        
-        short_password = self.random_password_generator(6)
-        new_password_field = yahoo_page.get_new_password_field()
-        yahoo_page.input_string(short_password,new_password_field)
+
+        #yahoo_page.click_new_password_field()
+        yahoo_page.input_new_password_field(self.random_password(6))
         
         #tab to the Confirm Password field, to load the error message
         yahoo_page.tab_to_next_field()    
@@ -100,10 +84,9 @@ class HomePageSetup(unittest.TestCase):
         """
         
         yahoo_page = self.yahoo_page
-        
-        long_password = self.random_password_generator(8)
-        new_password_field = yahoo_page.get_new_password_field()
-        yahoo_page.input_string(long_password,new_password_field)
+
+        long_password = self.random_password(8)
+        yahoo_page.input_new_password_field(long_password)
         
         yahoo_page.tab_to_next_field() 
         

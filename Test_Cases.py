@@ -5,7 +5,7 @@ import string
 import random
 import time
 import Secure 
-from Yahoo_Page_3 import *
+from Yahoo_Page import *
 
 
 class HomePageSetup(unittest.TestCase):

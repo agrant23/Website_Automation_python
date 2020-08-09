@@ -10,7 +10,7 @@ from Yahoo_Page import *
 
 class HomePageSetup(unittest.TestCase):
 
-    def random_password(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_name
+    def random_password(self, password_len):
         excluded_password_characters = ['\n','\t','\r','\x0b','\x0c']  
         for char in excluded_password_characters:
             password_characters = string.printable.replace(char,'')
@@ -19,7 +19,7 @@ class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
 
-        self.driver = webdriver.Chrome(options=options1)       #options1 is a global variable in Yahoo_Page_3   
+        self.driver = webdriver.Chrome(options=options1)
         self.yahoo_page = Yahoo_Page_3(self.driver)
         yahoo_page = self.yahoo_page
 

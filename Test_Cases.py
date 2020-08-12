@@ -20,7 +20,7 @@ class HomePageSetup(unittest.TestCase):
     def setUp(self):
 
         self.driver = webdriver.Chrome(options=options)       
-        self.yahoo_page = Yahoo_Page_3(self.driver)
+        self.yahoo_page = Yahoo_Page(self.driver)
         yahoo_page = self.yahoo_page
 
         yahoo_page.load_website("https://www.yahoo.com")
@@ -32,9 +32,6 @@ class HomePageSetup(unittest.TestCase):
         self.driver.quit()
 
 class Test_Sign_In_Link(HomePageSetup):
-
-    """ def setUp(self):
-        super().setUp() """
 
     def test_sign_in_link(self):
 
@@ -64,20 +61,13 @@ class Test_Password_Link(HomePageSetup):
         yahoo_page.click_profile_menu()
         yahoo_page.click_profile_menu_settings()
         yahoo_page.click_account_security_tab()
+        yahoo_page.click_change_password_link()
 
     def test_change_password_link(self):
 
-        yahoo_page = self.yahoo_page
+        self.assertIn('change-password' , self.driver.current_url)
 
-        yahoo_page.click_change_password_link()
-
-        self.assertTrue('change-password' in self.driver.title)
-
-class Error_Message_Tests(HomePageSetup):
-
-    def setUp(self):
-        super().setUp()
-        self.yahoo_page.click_sign_in_button()
+class Error_Message_Tests(Test_Password_Link):
 
     def test_short_password_error_message(self):
         """ 
@@ -116,12 +106,9 @@ class Error_Message_Tests(HomePageSetup):
         
         yahoo_page = self.yahoo_page
 
-        long_password = self.random_password(8)
-        yahoo_page.input_new_password_field(long_password)
+        yahoo_page.input_new_password_field(self.random_password(8))
         
         yahoo_page.tab_to_next_field() 
-        
-        #password_status = yahoo_page.password_error_message()
 
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")
         self.assertEqual(yahoo_page.password_error_message().text,"")

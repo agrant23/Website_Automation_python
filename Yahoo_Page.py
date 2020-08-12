@@ -14,7 +14,7 @@ options = Options()
 options.add_argument('load-extension=' + path_to_extension)
 
 
-class Yahoo_Page_3():
+class Yahoo_Page():
 
     def __init__(self,driver):
         self.driver = driver   

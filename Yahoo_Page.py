@@ -22,8 +22,6 @@ class Yahoo_Page():
 
     def load_website(self,home_url):     self.driver.get(home_url)  
 
-
-    #Switching to Tabs and Websites
     #after loading an extension it opens a new tab, so I tab back to yahoo tab
     def switch_to_tab(self):     
         current_tab = self.driver.current_window_handle

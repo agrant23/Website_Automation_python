@@ -61,11 +61,6 @@ class Test_Password_Link(HomePageSetup):
         yahoo_page.click_profile_menu()
         yahoo_page.click_profile_menu_settings()
         yahoo_page.click_account_security_tab()
-
-        yahoo_page.click_change_password_link()
-
-#class error_message_tests(HomePageSetup):
-
         yahoo_page.click_change_password_link()
 
     def test_change_password_link(self):

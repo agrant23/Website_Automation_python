@@ -8,17 +8,9 @@ import Secure
 from Yahoo_Page import *
 
 
-class HomePageSetup(unittest.TestCase):
+class HomePageSetup(unittest.TestCase):               
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def random_password(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_name
-=======
-    def random_password(self, password_len):                
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
-    def random_password(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_name
->>>>>>> yahoo_test_ver4
+    def random_password(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_nam
         excluded_password_characters = ['\n','\t','\r','\x0b','\x0c']  
         for char in excluded_password_characters:
             password_characters = string.printable.replace(char,'')
@@ -27,28 +19,15 @@ class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.driver = webdriver.Chrome(options=options1)       #options1 is a global variable in Yahoo_Page_3   
-        self.yahoo_page = Yahoo_Page_3(self.driver)
-=======
-        self.driver = webdriver.Chrome(options=options)       
-        self.yahoo_page = Yahoo_Page(self.driver)
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
-        self.driver = webdriver.Chrome(options=options1)       #options1 is a global variable in Yahoo_Page_3   
-        self.yahoo_page = Yahoo_Page_3(self.driver)
->>>>>>> yahoo_test_ver4
+        self.driver = webdriver.Chrome(options=options)  
+        self.yahoo_page = Yahoo_Page(self.driver)      
         yahoo_page = self.yahoo_page
 
         yahoo_page.load_website("https://www.yahoo.com")
                 
         #after loading an extension it opens a new tab, so I tab back to yahoo tab
         yahoo_page.switch_to_tab()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    
+
     def tearDown(self):
         self.driver.quit()
 
@@ -69,9 +48,6 @@ class Test_Password_Link(HomePageSetup):
         super().setUp()
 
         yahoo_page = self.yahoo_page
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
->>>>>>> yahoo_test_ver4
 
         yahoo_page.click_sign_in_button()
         yahoo_page.input_username_field(Secure.yahoo_username) 
@@ -85,16 +61,11 @@ class Test_Password_Link(HomePageSetup):
         yahoo_page.click_profile_menu()
         yahoo_page.click_profile_menu_settings()
         yahoo_page.click_account_security_tab()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> yahoo_test_ver4
 
         yahoo_page.click_change_password_link()
 
 #class error_message_tests(HomePageSetup):
-<<<<<<< HEAD
-=======
+
         yahoo_page.click_change_password_link()
 
     def test_change_password_link(self):
@@ -102,9 +73,6 @@ class Test_Password_Link(HomePageSetup):
         self.assertIn('change-password' , self.driver.current_url)
 
 class Error_Message_Tests(Test_Password_Link):
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
->>>>>>> yahoo_test_ver4
 
     def test_short_password_error_message(self):
         """ 
@@ -123,18 +91,8 @@ class Error_Message_Tests(Test_Password_Link):
         yahoo_page.input_new_password_field(self.random_password(6))
         
         #tab to the Confirm Password field, to load the error message
-        yahoo_page.tab_to_next_field()    
+        yahoo_page.tab_to_next_field()   
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        #password_status = yahoo_page.password_error_message()
-
-=======
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
-        #password_status = yahoo_page.password_error_message()
-
->>>>>>> yahoo_test_ver4
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"WEAK_PASSWORD")  
         self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess, try making it longer.")
 
@@ -151,40 +109,13 @@ class Error_Message_Tests(Test_Password_Link):
         the error text does not appears
         """
         
-        yahoo_page = self.yahoo_page
+        yahoo_page = self.yahoo_page 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> yahoo_test_ver4
-        long_password = self.random_password(8)
-        yahoo_page.input_new_password_field(long_password)
-        
-        yahoo_page.tab_to_next_field() 
-        
-        #password_status = yahoo_page.password_error_message()
-<<<<<<< HEAD
-=======
         yahoo_page.input_new_password_field(self.random_password(8))
         
-        yahoo_page.tab_to_next_field() 
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
->>>>>>> yahoo_test_ver4
+        yahoo_page.tab_to_next_field()
 
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")
         self.assertEqual(yahoo_page.password_error_message().text,"")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def tearDown(self):
-        self.driver.quit()
-
-=======
->>>>>>> 4828c49719da17275be976331c5c4842ebba1872
-=======
-    def tearDown(self):
-        self.driver.quit()
-
->>>>>>> yahoo_test_ver4
 if __name__ == "__main__": unittest.main()

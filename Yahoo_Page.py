@@ -10,23 +10,42 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
+<<<<<<< HEAD
 options1 = Options()
 options1.add_argument('load-extension=' + path_to_extension)
 
 
 class Yahoo_Page_3():
+=======
+options = Options()
+options.add_argument('load-extension=' + path_to_extension)
+
+
+class Yahoo_Page():
+>>>>>>> 4828c49719da17275be976331c5c4842ebba1872
 
     def __init__(self,driver):
         self.driver = driver   
 
     def load_website(self,home_url):     self.driver.get(home_url)  
 
+<<<<<<< HEAD
+=======
+    #Switching to Tabs and Websites
+
+>>>>>>> 4828c49719da17275be976331c5c4842ebba1872
     #after loading an extension it opens a new tab, so I tab back to yahoo tab
     def switch_to_tab(self):     
         current_tab = self.driver.current_window_handle
         wait(self.driver, 15).until(EC.number_of_windows_to_be(2))
         self.driver.switch_to.window(current_tab)
 
+<<<<<<< HEAD
+=======
+    def open_login_page(self):
+        wait(self.driver,15).until_not(EC.title_is('Yahoo'))
+
+>>>>>>> 4828c49719da17275be976331c5c4842ebba1872
     #Buttons
 
     def click_sign_in_button(self):
@@ -98,7 +117,11 @@ class Yahoo_Page_3():
     #Action Keys
 
     def tab_to_next_field(self,):  ActionChains(self.driver).send_keys(Keys.TAB).perform() 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4828c49719da17275be976331c5c4842ebba1872
     #Error Messages
 
     def password_error_message(self):

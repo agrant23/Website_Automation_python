@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+import Secure 
 import time
 
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
@@ -18,7 +19,12 @@ options.add_argument('load-extension=' + path_to_extension)
 class Yahoo_Page():
 
     def __init__(self,driver):
-        self.driver = driver   
+        self.driver = driver
+        driver.get("https://www.yahoo.com")
+        
+        #after loading an extension it opens a new tab, so I tab back to yahoo tab
+        self.switch_to_tab()            #since this method is within this class I call the method like this 
+
 
     def load_website(self,home_url):     self.driver.get(home_url)  
 
@@ -28,16 +34,13 @@ class Yahoo_Page():
         wait(self.driver, 15).until(EC.number_of_windows_to_be(2))
         self.driver.switch_to.window(current_tab)
 
-
-    def open_login_page(self):
-        wait(self.driver,15).until_not(EC.title_is('Yahoo'))
-
     #Buttons
 
     def click_sign_in_button(self):
         sign_in_button_loc = (By.ID,"header-signin-link")
         wait(self.driver,15).until(EC.element_to_be_clickable(sign_in_button_loc))
         self.driver.find_element(*sign_in_button_loc).click()
+        wait(self.driver,15).until_not(EC.title_is('Yahoo'))
     
     def click_username_next_button(self):      
         username_next_button_loc = (By.ID,"login-signin") 
@@ -71,7 +74,7 @@ class Yahoo_Page():
 
     #Popups
 
-    def tab_off_pop_up(self):
+    def pop_up_apperears_tab_off_it(self):
         wait(self.driver, 10).until(EC.url_changes('yahoo.com'))
         current_tab = self.driver.current_window_handle                  
         time.sleep(2)    #this is needed to give the pop up time to load/appear, no explicit wait handles this
@@ -104,6 +107,21 @@ class Yahoo_Page():
 
     def tab_to_next_field(self,):  ActionChains(self.driver).send_keys(Keys.TAB).perform() 
     
+    #User Flow          #can do this or should I delete these methods and create a login method with all of the selenium from each of these methods
+
+    def login(self):
+        self.click_sign_in_button()
+        self.input_username_field(Secure.yahoo_username) 
+        self.click_username_next_button()
+        self.input_password_field(Secure.yahoo_password)
+        self.click_password_next_button()
+        self.pop_up_apperears_tab_off_it() 
+
+    def navigate_to_security_tab(self):
+        self.click_profile_menu()
+        self.click_profile_menu_settings()
+        self.click_account_security_tab()
+
     #Error Messages
 
     def password_error_message(self):

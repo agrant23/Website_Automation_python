@@ -4,11 +4,10 @@ import unittest
 import string
 import random
 import time
-import Secure 
 from Yahoo_Page import *
 
 
-class HomePageSetup(unittest.TestCase):               
+class HomePageSetup(unittest.TestCase):         #Template class         
 
     def random_password(self, password_len):                  #self is needed in paramaters and to call the function needs self.function_nam
         excluded_password_characters = ['\n','\t','\r','\x0b','\x0c']  
@@ -21,12 +20,6 @@ class HomePageSetup(unittest.TestCase):
 
         self.driver = webdriver.Chrome(options=options)  
         self.yahoo_page = Yahoo_Page(self.driver)      
-        yahoo_page = self.yahoo_page
-
-        yahoo_page.load_website("https://www.yahoo.com")
-                
-        #after loading an extension it opens a new tab, so I tab back to yahoo tab
-        yahoo_page.switch_to_tab()
 
     def tearDown(self):
         self.driver.quit()
@@ -34,40 +27,45 @@ class HomePageSetup(unittest.TestCase):
 class Test_Sign_In_Link(HomePageSetup):
 
     def test_sign_in_link(self):
+        """ 
+        Confirm the sign in or login internal link is correct 
 
-        yahoo_page = self.yahoo_page
+        acceptance criteria   
+        --------------------
+        -After clicking the sign in button the link's URL is on the login page 
+        """
 
-        yahoo_page.click_sign_in_button()
-        yahoo_page.open_login_page()
-
-        self.assertTrue('login' in self.driver.title) 
+        self.yahoo_page.click_sign_in_button()
+        self.assertIn('login', self.driver.current_url) 
 
 class Test_Password_Link(HomePageSetup):
 
     def setUp(self):
         super().setUp()
 
-        yahoo_page = self.yahoo_page
-
-        yahoo_page.click_sign_in_button()
-        yahoo_page.input_username_field(Secure.yahoo_username) 
-        yahoo_page.click_username_next_button()
-
-        yahoo_page.input_password_field(Secure.yahoo_password)
-        yahoo_page.click_password_next_button()
-
-        yahoo_page.tab_off_pop_up()
-
-        yahoo_page.click_profile_menu()
-        yahoo_page.click_profile_menu_settings()
-        yahoo_page.click_account_security_tab()
-        yahoo_page.click_change_password_link()
+        self.yahoo_page.login()
+        self.yahoo_page.navigate_to_security_tab()
 
     def test_change_password_link(self):
+        """ 
+        Confirm the sign in or login internal link is correct 
 
-        self.assertIn('change-password' , self.driver.current_url)
+        acceptance criteria   
+        --------------------
+        -After clicking the sign in button the link's URL is on the login page 
+        """
 
-class Error_Message_Tests(Test_Password_Link):
+        self.yahoo_page.click_change_password_link()
+        self.assertIn('change-password', self.driver.current_url)
+
+class Error_Message_Tests(HomePageSetup):
+
+    def setUp(self):
+        super().setUp()
+
+        self.yahoo_page.login()
+        self.yahoo_page.navigate_to_security_tab()
+        self.yahoo_page.click_change_password_link() 
 
     def test_short_password_error_message(self):
         """ 
@@ -80,7 +78,6 @@ class Error_Message_Tests(Test_Password_Link):
         -When a password that is too short is entered data error exists,
         the error text appears and is the same as it is now 08/08/2020
         """
-
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(6))
@@ -103,8 +100,7 @@ class Error_Message_Tests(Test_Password_Link):
         -When a password that is too long is entered data error does not exist and
         the error text does not appears
         """
-        
-        yahoo_page = self.yahoo_page 
+        yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(8))
         

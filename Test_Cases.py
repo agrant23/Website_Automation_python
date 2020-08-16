@@ -4,7 +4,7 @@ import time
 from Yahoo_Page import *
 from Tools import *
 
-class HomePageSetup(unittest.TestCase):         #Template class         
+class HomePageSetup(unittest.TestCase):         
 
     def random_password(self, password_len): 
         excluded_password_chars = ['\n','\t','\r','\x0b','\x0c']                

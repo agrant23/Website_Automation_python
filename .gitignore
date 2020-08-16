@@ -1,0 +1,3 @@
+#Ignore Secure.py
+Secure.py
+__pycache__/

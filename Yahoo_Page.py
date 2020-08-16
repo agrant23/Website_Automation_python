@@ -23,7 +23,7 @@ class Yahoo_Page():
         driver.get("https://www.yahoo.com")
         
         #after loading an extension it opens a new tab, so I tab back to yahoo tab
-        self.switch_to_tab()            #since this method is within this class I call the method like this 
+        self.switch_to_tab()
 
 
     def load_website(self,home_url):     self.driver.get(home_url)  

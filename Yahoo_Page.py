@@ -23,7 +23,7 @@ class Yahoo_Page():
         driver.get("https://www.yahoo.com")
         
         #after loading an extension it opens a new tab, so I tab back to yahoo tab
-        self.switch_to_tab()            #since this method is within this class I call the method like this 
+        self.switch_to_tab()          
 
 
     def load_website(self,home_url):     self.driver.get(home_url)  
@@ -49,6 +49,8 @@ class Yahoo_Page():
         
     def click_password_next_button(self):  self.driver.find_element_by_class_name("button-container").find_element_by_id('login-signin').click()
     
+    def click_search_button(self):  self.driver.find_element_by_id('header-desktop-search-button')
+
     #Fields
 
     def username_field(self):
@@ -71,6 +73,16 @@ class Yahoo_Page():
         return self.driver.find_element(*new_password_field_loc)
     
     def input_new_password_field(self,newPassWord):   self.new_password_field().send_keys(newPassWord)
+
+    def current_cursor_id(self):
+        return self.driver.switch_to.active_element.get_attribute('id')
+    
+    def search_field_id(self):
+        search_field_loc = (By.ID,"header-search-input")
+        wait(self.driver,15).until(EC.presence_of_element_located(search_field_loc))
+        return self.driver.find_element(*search_field_loc).get_attribute('id')        
+
+    def input_search_field(self,search):    self.search_field_id().send_keys(search)
 
     #Popups
 

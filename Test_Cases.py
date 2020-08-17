@@ -19,7 +19,35 @@ class HomePageSetup(unittest.TestCase):         #Template class
         self.driver.quit()
 
 
-class Test_Sign_In_Link(HomePageSetup):
+class Search(HomePageSetup):
+    """
+    Confirm the cursor is present in the Search field after the yahoo home page is opened.
+    After an arbitrary input is given to the search field confirm that clicking the search icon navigates
+    the user to the search page.  There are at least three links in the search page that directly correlate 
+    to the search input.       
+
+    acceptance criteria   
+    --------------------
+    -The cursur is in the search field after the yahoo home page is opened.
+    -When the search field is given an input, the user is navigated to the search page.
+    -At least three correlating links to the search input appear in the search page
+    """
+    def test_cursur_on_search_field(self):
+
+        #I know I need an action here due to the definition of what a test is. However the test relies on nothing happening; or the cursor being where it 'should' be after yahoo home page open's
+        self.assertEqual(self.yahoo_page.current_cursor_id(), self.yahoo_page.search_field_id())
+
+    def test_search_page(self):
+
+        yahoo_page = self.yahoo_page
+        
+        yahoo_page.input_search_field('Kendrick Lamar')
+        yahoo_page.click_search_button()
+        self.assertIn('login', self.driver.current_url) #,
+            #'\nLocation: ' + yahoo_page.location_field_contents() + '\nRewards: ' + yahoo_page.rewards_field_contents())
+
+
+class Sign_In_Link(HomePageSetup):
 
     def test_sign_in_link(self):
         """ 
@@ -34,7 +62,7 @@ class Test_Sign_In_Link(HomePageSetup):
         self.assertIn('login', self.driver.current_url) 
 
 
-class Test_Password_Link(HomePageSetup):
+class Password_Link(HomePageSetup):
 
     def setUp(self):
         super().setUp()
@@ -56,7 +84,7 @@ class Test_Password_Link(HomePageSetup):
         self.assertIn('change-password', self.driver.current_url)
 
 
-class Error_Message_Tests(HomePageSetup):
+class Error_Message_Passwords(HomePageSetup):
 
     def setUp(self):
         super().setUp()

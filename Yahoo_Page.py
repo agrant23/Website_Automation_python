@@ -105,7 +105,7 @@ class Yahoo_Page():
 
     #Action Keys
 
-    def tab_to_next_field(self,):  ActionChains(self.driver).send_keys(Keys.TAB).perform() 
+    def tab_to_next_field(self):  ActionChains(self.driver).send_keys(Keys.TAB).perform() 
     
     #User Flow          #can do this or should I delete these methods and create a login method with all of the selenium from each of these methods
 

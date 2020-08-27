@@ -13,7 +13,7 @@ import time
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
 options = Options()
-options.add_argument('load-extension=' + path_to_extension)
+options.add_argument('load-extension=' + path_to_extension) #the extension is adBlocker, this allows navigation without adds hiding
 
 
 class Yahoo_Page():
@@ -38,6 +38,8 @@ class Yahoo_Page():
 
     def click_sign_in_button(self):
         sign_in_button_loc = (By.ID,"header-signin-link")
+        #wait(self.driver,15).until(EC.presence_of_element_located(sign_in_button_loc))
+        #wait(self.driver,15).until(EC.visibility_of_element_located(sign_in_button_loc))
         wait(self.driver,15).until(EC.element_to_be_clickable(sign_in_button_loc))
         self.driver.find_element(*sign_in_button_loc).click()
         #wait(self.driver,15).until_not(EC.title_is('Yahoo'))
@@ -49,7 +51,10 @@ class Yahoo_Page():
         
     def click_password_next_button(self):  self.driver.find_element_by_class_name("button-container").find_element_by_id('login-signin').click()
     
-    def click_search_button(self):  self.driver.find_element_by_id('header-desktop-search-button')
+    def click_search_button(self):  
+        search_button_loc = (By.ID,'header-desktop-search-button')
+        wait(self.driver, 15).until(EC.element_to_be_clickable(search_button_loc))
+        self.driver.find_element_by_id('header-desktop-search-button').click()
 
     #Fields
 
@@ -57,32 +62,33 @@ class Yahoo_Page():
         username_field_loc = (By.ID,'login-username')               
         wait(self.driver, 15).until(EC.presence_of_element_located(username_field_loc))
         return self.driver.find_element(*username_field_loc)      
-
     def input_username_field(self,userName):     self.username_field().send_keys(userName)
 
     def password_field(self):
         password_field_loc = (By.ID,"login-passwd")
         wait(self.driver,15).until(EC.presence_of_element_located(password_field_loc))
-        return self.driver.find_element(*password_field_loc)
-        
+        return self.driver.find_element(*password_field_loc)       
     def input_password_field(self,passWord):    self.password_field().send_keys(passWord)
 
     def new_password_field(self):
         new_password_field_loc = (By.ID,'cpwd-password')
         wait(self.driver,15).until(EC.presence_of_element_located(new_password_field_loc))
-        return self.driver.find_element(*new_password_field_loc)
-    
+        return self.driver.find_element(*new_password_field_loc)    
     def input_new_password_field(self,newPassWord):   self.new_password_field().send_keys(newPassWord)
 
     def current_cursor_id(self):
         return self.driver.switch_to.active_element.get_attribute('id')
     
-    def search_field_id(self):
+    def search_field(self):
         search_field_loc = (By.ID,"header-search-input")
-        wait(self.driver,15).until(EC.presence_of_element_located(search_field_loc))
-        return self.driver.find_element(*search_field_loc).get_attribute('id')        
+        wait(self.driver,15).until(EC.visibility_of_element_located(search_field_loc))
+        #wait(self.driver,15).until(EC.presence_of_element_located(search_field_loc))
+        return self.driver.find_element(*search_field_loc)        
+    def search_field_id(self):      return self.search_field().get_attribute('id')
+    def input_search_field(self,search):    self.search_field().send_keys(search)
+    def search_field_contents(self):    
+        return self.driver.find_element_by_xpath('//input[@type="text"]').get_attribute('value')
 
-    def input_search_field(self,search):    self.search_field_id().send_keys(search)
 
     #Popups
 
@@ -101,6 +107,12 @@ class Yahoo_Page():
         wait(self.driver,15).until(EC.element_to_be_clickable(setting_link_loc))
         self.driver.find_element(*setting_link_loc).click()
     
+    def hover_originals_drop_down(self):
+        originals_drop_down_loc = (By.XPATH,'//a[@title="Originals"]')
+        #wait(self.driver,15).until(EC.visibility_of_element_located(originals_drop_down_loc))
+        drop_down_element = self.driver.find_element(*originals_drop_down_loc)
+        ActionChains(self.driver).move_to_element(drop_down_element).perform()
+
     #Tabs
 
     def click_account_security_tab(self):       
@@ -108,6 +120,11 @@ class Yahoo_Page():
         wait(self.driver,15).until(EC.presence_of_element_located(account_security_loc))
         self.driver.find_element(*account_security_loc).click()
     
+    def click_The_Ideas_Election_tab(self):
+        The_360_tab_loc = (By.XPATH,'//a[@title="The Ideas Election"]')
+        #wait(self.driver,15).until(EC.visibility_of_element_located(The_360_tab_loc))
+        self.driver.find_element(*The_360_tab_loc).click() 
+
     #Links
 
     def click_change_password_link(self):
@@ -115,13 +132,16 @@ class Yahoo_Page():
         wait(self.driver,15).until(EC.element_to_be_clickable(change_password_loc))
         self.driver.find_element(*change_password_loc).click()
 
+    def click_news_link(self):        self.driver.find_element_by_link_text('News').click()
+
     #Action Keys
 
-    def tab_to_next_field(self,):  ActionChains(self.driver).send_keys(Keys.TAB).perform() 
-    
-    #User Flow          #can do this or should I delete these methods and create a login method with all of the selenium from each of these methods
+    def tab_to_next_field(self):  ActionChains(self.driver).send_keys(Keys.TAB).perform() 
+
+    #User Flow
 
     def login(self):
+        #time.sleep(1)
         self.click_sign_in_button()
         self.input_username_field(Secure.yahoo_username) 
         self.click_username_next_button()
@@ -140,3 +160,7 @@ class Yahoo_Page():
         password_status_loc = (By.ID,'cpwd-error-password')
         password_status_element = wait(self.driver,15).until(EC.presence_of_element_located(password_status_loc)) 
         return password_status_element
+
+    #Waits for page
+
+    def new_page_loads_off_News(self):    wait(self.driver,15).until_not(EC.title_is('Yahoo News - Latest News & Headlines'))

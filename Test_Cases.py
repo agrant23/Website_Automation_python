@@ -4,7 +4,7 @@ import time
 from Yahoo_Page import *
 from Tools import *
 
-class HomePageSetup(unittest.TestCase):         #Template class         
+class HomePageSetup(unittest.TestCase):        
 
     def random_password(self, password_len): 
         excluded_password_chars = ['\n','\t','\r','\x0b','\x0c']                
@@ -23,17 +23,15 @@ class Search(HomePageSetup):
     """
     Confirm the cursor is present in the Search field after the yahoo home page is opened.
     After an arbitrary input is given to the search field confirm that clicking the search icon navigates
-    the user to the search page.  There are at least three links in the search page that directly correlate 
-    to the search input.       
+    the user to the search page.
 
     acceptance criteria   
     --------------------
     -The cursur is in the search field after the yahoo home page is opened.
     -When the search field is given an input, the user is navigated to the search page.
-    -At least three correlating links to the search input appear in the search page
     """
     def test_cursur_on_search_field(self):
-
+        
         #I know I need an action here due to the definition of what a test is. However the test relies on nothing happening; or the cursor being where it 'should' be after yahoo home page open's
         self.assertEqual(self.yahoo_page.current_cursor_id(), self.yahoo_page.search_field_id())
 
@@ -43,9 +41,32 @@ class Search(HomePageSetup):
         
         yahoo_page.input_search_field('Kendrick Lamar')
         yahoo_page.click_search_button()
-        self.assertIn('login', self.driver.current_url) #,
-            #'\nLocation: ' + yahoo_page.location_field_contents() + '\nRewards: ' + yahoo_page.rewards_field_contents())
+        self.assertIn('search', self.driver.current_url,
+            '\nSearch: ' + yahoo_page.search_field_contents())
 
+class Drop_Down(HomePageSetup):
+    """
+    For the Originals drop down menu within yahoo news;
+    ensure this drop down's links sends the user to the correlating site.
+
+    acceptance criteria   
+    --------------------
+    -When the link is clicked the user is sent to a different site.
+    -The site's url or title has the same or a similar title to that of the text on the drop down link.
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.yahoo_page.click_news_link()
+        self.driver.maximize_window()       #needed to show drop down tab
+        self.yahoo_page.hover_originals_drop_down()
+
+    def test_The_Ideas_Election(self):
+        self.yahoo_page.click_The_Ideas_Election_tab()
+        time.sleep(2)
+        #self.yahoo_page.new_page_loads_off_News()
+        self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines')
+        self.assertIn('360',self.driver.current_url)
 
 class Sign_In_Link(HomePageSetup):
 
@@ -111,7 +132,7 @@ class Error_Message_Passwords(HomePageSetup):
         yahoo_page.tab_to_next_field()   #tab to the Confirm Password field, to load the error message
 
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"WEAK_PASSWORD")  
-        self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess, try making it longer.")
+        self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess.")
 
 
     def test_long_password_error_message(self):

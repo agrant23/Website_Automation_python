@@ -1,4 +1,3 @@
-
 import unittest
 import time
 from Yahoo_Page import *
@@ -6,9 +5,7 @@ from Tools import *
 
 class HomePageSetup(unittest.TestCase):        
 
-    def random_password(self, password_len): 
-        excluded_password_chars = ['\n','\t','\r','\x0b','\x0c']                
-        return Tools().generate_random_string(excluded_password_chars, password_len)
+    #I initially had random password method here, moved it closer to where it is used
         
     def setUp(self):
 
@@ -17,7 +14,6 @@ class HomePageSetup(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
-
 
 class Search(HomePageSetup):
     """
@@ -33,18 +29,17 @@ class Search(HomePageSetup):
     def test_cursur_on_search_field(self):
         
         #I know I need an action here due to the definition of what a test is. However the test relies on nothing happening; or the cursor being where it 'should' be after yahoo home page open's
+        #time.sleep(1)
         self.assertEqual(self.yahoo_page.current_cursor_id(), self.yahoo_page.search_field_id())
 
     def test_search_page(self):
-
-        yahoo_page = self.yahoo_page
         
-        yahoo_page.input_search_field('Kendrick Lamar')
-        yahoo_page.click_search_button()
+        self.yahoo_page.input_search_field('Kendrick Lamar')
+        self.yahoo_page.click_search_button()
         self.assertIn('search', self.driver.current_url,
-            '\nSearch: ' + yahoo_page.search_field_contents())
+            '\nSearch: ' + self.yahoo_page.search_field_contents())  #recommended to do this for all asserts?
 
-class Drop_Down(HomePageSetup):
+class Dynamic_Drop_Down(HomePageSetup):
     """
     For the Originals drop down menu within yahoo news;
     ensure this drop down's links sends the user to the correlating site.
@@ -54,19 +49,27 @@ class Drop_Down(HomePageSetup):
     -When the link is clicked the user is sent to a different site.
     -The site's url or title has the same or a similar title to that of the text on the drop down link.
     """
-
+    
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
         self.driver.maximize_window()       #needed to show drop down tab
         self.yahoo_page.hover_originals_drop_down()
 
+    #I will likely delete this test
     def test_The_Ideas_Election(self):
+        
         self.yahoo_page.click_The_Ideas_Election_tab()
-        time.sleep(2)
-        #self.yahoo_page.new_page_loads_off_News()
+        self.yahoo_page.navigate_off_News_page()        #I can put this wait in the method above
+        self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines',msg='Page may not have loaded')
+        self.assertIn('ideas-election',self.driver.current_url)
+    
+    def test_any_random_tab(self):
+        
+        self.yahoo_page.click_random_tab_from_originals_drop_down()
+        self.yahoo_page.navigate_off_News_page()
         self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines')
-        self.assertIn('360',self.driver.current_url)
+        self.assertIn(self.yahoo_page.random_tab_title(),self.driver.current_url)
 
 class Sign_In_Link(HomePageSetup):
 
@@ -106,6 +109,10 @@ class Password_Link(HomePageSetup):
 
 
 class Error_Message_Passwords(HomePageSetup):
+
+    def random_password(self, password_len): 
+        excluded_password_chars = ['\n','\t','\r','\x0b','\x0c']                
+        return Tools().generate_random_string(excluded_password_chars, password_len)
 
     def setUp(self):
         super().setUp()
@@ -151,7 +158,7 @@ class Error_Message_Passwords(HomePageSetup):
         yahoo_page.input_new_password_field(self.random_password(8))       
         yahoo_page.tab_to_next_field()      #tab to the Confirm Password field, to load the error message
 
-        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")
+        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error' or None),"")   #is it ok to put logic operators in here like this?
         self.assertEqual(yahoo_page.password_error_message().text,"")
 
 if __name__ == "__main__": unittest.main()

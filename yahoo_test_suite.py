@@ -3,13 +3,15 @@ from Test_Cases import *
 
 def suite():
     suite = unittest.TestSuite()
+    suite.addTest(Search("test_cursur_on_search_field"))
+    suite.addTest(Search('test_search_page'))
+    suite.addTest(Dynamic_Drop_Down('test_The_Ideas_Election'))
+    suite.addTest(Dynamic_Drop_Down('test_any_random_tab'))
     suite.addTest(Sign_In_Link("test_sign_in_link"))
     suite.addTest(Password_Link("test_change_password_link"))
     suite.addTest(Error_Message_Passwords("test_short_password_error_message"))
     suite.addTest(Error_Message_Passwords("test_long_password_error_message"))
-    suite.addTest(Search("test_cursur_on_search_field"))
-    suite.addTest(Search('test_search_page'))
-    suite.addTest(Drop_Down('test_The_Ideas_Election'))
+
     return suite
 
 

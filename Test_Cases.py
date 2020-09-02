@@ -3,7 +3,9 @@ import time
 from Yahoo_Page import *
 from Tools import *
 
-class HomePageSetup(unittest.TestCase):        
+class HomePageSetup(unittest.TestCase):
+
+    #THIS HAS CHANGED  Please show this times 3     
 
     #I initially had random password method here, moved it closer to where it is used
         
@@ -49,27 +51,23 @@ class Dynamic_Drop_Down(HomePageSetup):
     -When the link is clicked the user is sent to a different site.
     -The site's url or title has the same or a similar title to that of the text on the drop down link.
     """
-    
+    def convert_option_title_to_url_block(self,drop_down_option_title):
+        excluded_word1 = 'the'
+        replace_space= '-'
+        return Tools().del_words_replace_space_of_string(drop_down_option_title,replace_space, excluded_word1)
+
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
         self.driver.maximize_window()       #needed to show drop down tab
         self.yahoo_page.hover_originals_drop_down()
 
-    #I will likely delete this test
-    def test_The_Ideas_Election(self):
-        
-        self.yahoo_page.click_The_Ideas_Election_tab()
-        self.yahoo_page.navigate_off_News_page()        #I can put this wait in the method above
-        self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines',msg='Page may not have loaded')
-        self.assertIn('ideas-election',self.driver.current_url)
-    
     def test_any_random_tab(self):
         
-        self.yahoo_page.click_random_tab_from_originals_drop_down()
-        self.yahoo_page.navigate_off_News_page()
+        yahoo_page = self.yahoo_page
+        yahoo_page.click_random_option_from_originals_drop_down()
         self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines')
-        self.assertIn(self.yahoo_page.random_tab_title(),self.driver.current_url)
+        self.assertIn(self.convert_option_title_to_url_block(yahoo_page._random_option_title()),self.driver.current_url)
 
 class Sign_In_Link(HomePageSetup):
 

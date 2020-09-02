@@ -127,17 +127,19 @@ class Yahoo_Page():
         #script = getElementByXpath("//a[@title='The Ideas Election']") 
         #self.driver.execute_script('script.click();)
 
-    def click_random_tab_from_originals_drop_down(self):
-        all_tabs = self.driver.find_elements_by_xpath ('//a[contains(@class,"nr-subnav-link")]')
-        random_tab = all_tabs[Tools().generate_randon_number(9)]
-        self._rand_tab_title = random_tab.get_attribute('title')
-        random_tab.click()
+    def click_random_option_from_originals_drop_down(self):
+        all_options = self.driver.find_elements_by_xpath ('//a[contains(@class,"nr-subnav-link")]')
+        #options that vary their internal links and are therefore not included in selecting a random option are, index # = Title: 2 = Baby Brain 5 =2020 Vision Column, 6 = 2020 Candidate Tracker, 7 = The Ideas Election, 8 = Presidential Leadership Series.
+        random_option = all_options[Tools().generate_randon_number_with_excluded_nums(9,2,5,6,7,8)]
+        self._rand_option_title = random_option.get_attribute('title')
+        random_option.click()
+        wait(self.driver,15).until_not(EC.title_is('Yahoo News - Latest News & Headlines'))     #helpful wait for the next page to load
         #all_tabs_originals_loc = (By.XPATH,'//a[contains(@class,"nr-subnav-link")]')
         #random_tab_loc = 
         #wait(self.driver,15).until(EC.element_to_be_clickable(random_tab_loc))
     
-    def random_tab_title(self):
-        return str.lower(self._rand_tab_title)
+    def _random_option_title(self):
+        return str.lower(self._rand_option_title)
 
     #Links
 
@@ -182,10 +184,6 @@ class Yahoo_Page():
             wait(self.driver,15).until(EC.visibility_of_element_located(originals_drop_down_loc))
         except TimeoutError as exception:
            raise exception
-        
-    #Waits for page
-
-    def navigate_off_News_page(self):    wait(self.driver,15).until_not(EC.title_is('Yahoo News - Latest News & Headlines'))
 
 
     #Get attributes

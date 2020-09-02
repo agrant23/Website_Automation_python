@@ -5,7 +5,7 @@ from Tools import *
 
 class HomePageSetup(unittest.TestCase):
 
-    #THIS HAS CHANGED  Please show this      
+    #THIS HAS CHANGED  Please show this times 3     
 
     #I initially had random password method here, moved it closer to where it is used
         

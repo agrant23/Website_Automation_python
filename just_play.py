@@ -34,32 +34,20 @@ a = A()
 
 #print(Tools().generate_randon_number_with_excluded_nums(10,5,6,7,8,0))
 
-def random1(max_num,*discarded_nums):
+def random1(max_num,*discarded_nums):       #doesn't work
     while True:
-        _rand_num = random.randrange(max_num)
+        _rand_num = 2  #random.randrange(max_num)
         for bad_num in discarded_nums:
-            rand_nums = [] 
-            if _rand_num and rand_nums == bad_num:
+            if _rand_num == bad_num:
                 print(_rand_num)
-                print(rand_nums)
-                continue
-            elif _rand_num and rand_nums != bad_num:
-                _rand_num = rand_nums
-                print(_rand_num)
-                print(rand_nums)
                 pass
             else:
-                break
+                return _rand_num
+                #break
     
-    return _rand_num
-        #while _rand_num != bad_num:
-        #    _rand_num = *_rand_nums
-
-
-
 
 print('\n'+'please work')
-#print(random1(10, 2, 5, 6, 8, 1, 3, 4, 7, 0))
+print(random1(10, 2, 5, 6, 8, 1, 3, 4, 7, 0))
 
 def random2(max_num,ex_num1=None,ex_num2=None,ex_num3=None,ex_num4=None,ex_num5=None,ex_num6=None,ex_num7=None):
     #random.randrange

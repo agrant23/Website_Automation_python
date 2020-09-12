@@ -21,16 +21,22 @@ class Tools():
 
     #String Manipulation
 
-    def del_words_replace_space_of_string(self, string_in, char_replacing=None, word_replace1=None,word_replace2=None):  #where up to three deleted words are the arguments 
+    def del_replace_words_and_spaces_of_string(self, string_in, new_space_char=None, word_del1=None, word_del2=None, word_del3=None, word_del4=None, word_rep1=None,with_word_repl1=None,word_rep2=None,with_word_repl2=None):
         string_in = str.lower(string_in)
         word_list = string_in.split(' ')
         string_out = ""
         for word in word_list:
-            if word == word_replace1 or word == word_replace2:     #or word == args or word ==args:
+            if word == word_del1 or word == word_del2 or word == word_del3 or word == word_del4:     
                 del(word)
+            elif word == word_rep1:  # or word == word_rep2:
+                del(word)
+                string_out = string_out + with_word_repl1 + new_space_char
+            elif word == word_rep2:
+                del(word)
+                string_out = string_out + with_word_repl2 + new_space_char
             else:
-                string_out = string_out + word + char_replacing
-        return string_out[ :-1: ]
+                string_out = string_out + word + new_space_char
+        return string_out[ :-1: ]                           #[ :-1: ] cuts off the last character of the output string which is the character replacing the last space
 
     
     

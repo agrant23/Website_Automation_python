@@ -3,13 +3,11 @@ import time
 from Yahoo_Page import *
 from Tools import *
 
-class HomePageSetup(unittest.TestCase):        
+class HomePageSetup(unittest.TestCase):
 
-    #I initially had random password method here, moved it closer to where it is used
-        
     def setUp(self):
-
-        self.driver = webdriver.Chrome(options=options)  
+    
+        self.driver = webdriver.Chrome(options=options1)  
         self.yahoo_page = Yahoo_Page(self.driver)      
 
     def tearDown(self):
@@ -28,15 +26,13 @@ class Search(HomePageSetup):
     """
     def test_cursur_on_search_field(self):
         
-        #I know I need an action here due to the definition of what a test is. However the test relies on nothing happening; or the cursor being where it 'should' be after yahoo home page open's
-        #time.sleep(1)
         self.assertEqual(self.yahoo_page.current_cursor_id(), self.yahoo_page.search_field_id())
 
     def test_search_page(self):
         
         self.yahoo_page.input_search_field('Kendrick Lamar')
         self.yahoo_page.click_search_button()
-        self.assertIn('search', self.driver.current_url,
+        self.assertIn('search' or 'search?', self.driver.current_url,
             '\nSearch: ' + self.yahoo_page.search_field_contents())  #recommended to do this for all asserts?
 
 class Dynamic_Drop_Down(HomePageSetup):
@@ -50,22 +46,28 @@ class Dynamic_Drop_Down(HomePageSetup):
     -The site's url or title has the same or a similar title to that of the text on the drop down link.
     """
     def convert_option_title_to_url_block(self,drop_down_option_title):
-        excluded_word1 = 'the'
-        replace_space= '-'
-        return Tools().del_words_replace_space_of_string(drop_down_option_title,replace_space, excluded_word1)
+        replace_space = '-'
+        del_word1 = 'the'
+        del_word2 = 'column'
+        del_word3 = 'series'
+        replace_word1 = 'presidential'
+        with_word1 = 'presidents'
+        replace_word2 = 'leadership'
+        with_word2 = 'lead'
+        return Tools().del_replace_words_and_spaces_of_string(drop_down_option_title,replace_space, del_word1, del_word2, del_word3,None, replace_word1,with_word1, replace_word2,with_word2)
 
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        self.driver.maximize_window()       #needed to show drop down tab
-        self.yahoo_page.hover_originals_drop_down()
+        self.driver.maximize_window()       #this is needed to be able to see and click the originals drop down tab
+        self.yahoo_page.hover_over_originals_drop_down()
 
-    def test_any_random_tab(self):
-        
+    def test_any_random_tab(self):  
         yahoo_page = self.yahoo_page
         yahoo_page.click_random_option_from_originals_drop_down()
+        #time.sleep(5)
         self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines')
-        self.assertIn(self.convert_option_title_to_url_block(yahoo_page._random_option_title()),self.driver.current_url)
+        self.assertIn(self.convert_option_title_to_url_block(yahoo_page._random_option_title),self.driver.current_url)
 
 class Sign_In_Link(HomePageSetup):
 
@@ -131,9 +133,8 @@ class Error_Message_Passwords(HomePageSetup):
         """     
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(6))
+        yahoo_page.input_new_password_field(self.random_password(4))
         yahoo_page.tab_to_next_field()   #tab to the Confirm Password field, to load the error message
-
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"WEAK_PASSWORD")  
         self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess.")
 
@@ -151,10 +152,10 @@ class Error_Message_Passwords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(8))       
+        yahoo_page.input_new_password_field(self.random_password(9))       
         yahoo_page.tab_to_next_field()      #tab to the Confirm Password field, to load the error message
 
-        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error' or None),"")   #is it ok to put logic operators in here like this?
+        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")    # or None)
         self.assertEqual(yahoo_page.password_error_message().text,"")
 
 if __name__ == "__main__": unittest.main()

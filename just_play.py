@@ -69,3 +69,17 @@ while random.randrange(10) == 5:
     pass
 print('\n')
 #print(Tools().generate_randon_number_with_excluded_nums(10, 2, 5, 6, 8))
+
+
+def convert_option_title_to_url_block(drop_down_option_title):
+    excluded_word1 = 'the'
+    exclude_word2 = 'column'
+    excluded_word2 = 'word'
+    replace_space= '~'
+    replace_word1 = 'this'
+    replace_word2 = 'a'
+    with_word1 = 'HELLO'
+    with_word2 = "TONY HERE"
+    return Tools().del_replace_words_and_spaces_of_string(drop_down_option_title,replace_space, excluded_word1,None,replace_word1,replace_word2,with_word1,with_word2)
+
+print(convert_option_title_to_url_block("the column word Let this work please with a cherry on top"))

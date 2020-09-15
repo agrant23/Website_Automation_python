@@ -3,6 +3,7 @@ import time
 from Yahoo_Page import *
 from Tools import *
 
+
 class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
@@ -12,6 +13,7 @@ class HomePageSetup(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
+
 
 class Search(HomePageSetup):
     """
@@ -35,15 +37,16 @@ class Search(HomePageSetup):
         self.assertIn('search' or 'search?', self.driver.current_url,
             '\nSearch: ' + self.yahoo_page.search_field_contents())  #recommended to do this for all asserts?
 
+
 class Dynamic_Drop_Down(HomePageSetup):
     """
     For the Originals drop down menu within yahoo news;
-    ensure this drop down's links sends the user to the correlating site.
+    ensure this drop down's options sends the user to the correlating site.
 
     acceptance criteria   
     --------------------
     -When the link is clicked the user is sent to a different site.
-    -The site's url or title has the same or a similar title to that of the text on the drop down link.
+    -The site's url or title has a similar title to that of the text on the drop down option.
     """
     def convert_option_title_to_url_block(self,drop_down_option_title):
         replace_space = '-'
@@ -59,21 +62,21 @@ class Dynamic_Drop_Down(HomePageSetup):
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        self.driver.maximize_window()       #this is needed to be able to see and click the originals drop down tab
+        self.driver.maximize_window()       #this is needed to be able to see and hover over the originals drop down tab
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):  
         yahoo_page = self.yahoo_page
         yahoo_page.click_random_option_from_originals_drop_down()
-        #time.sleep(5)
         self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines')
         self.assertIn(self.convert_option_title_to_url_block(yahoo_page._random_option_title),self.driver.current_url)
 
-class Sign_In_Link(HomePageSetup):
 
-    def test_sign_in_link(self):
+class Log_In_Link(HomePageSetup):
+
+    def test_log_in_link(self):
         """ 
-        Confirm the sign in or login internal link is correct 
+        Confirm the sign in (or logi) internal link is correct 
 
         acceptance criteria   
         --------------------
@@ -95,11 +98,11 @@ class Password_Link(HomePageSetup):
 
     def test_change_password_link(self):
         """ 
-        Confirm the sign in or login internal link is correct 
+        Confirm the change password internal link is correct 
 
         acceptance criteria   
         --------------------
-        -After clicking the sign in button the browser's URL is on the login page 
+        -After clicking the change password button the browser's URL is on the change password page 
         """
 
         self.yahoo_page.click_change_password_link()
@@ -119,7 +122,6 @@ class Error_Message_Passwords(HomePageSetup):
         self.yahoo_page.navigate_to_security_tab()
         self.yahoo_page.click_change_password_link() 
 
-
     def test_short_password_error_message(self):
         """ 
         Confirm the entered password is one character short of required minimum length.
@@ -134,28 +136,27 @@ class Error_Message_Passwords(HomePageSetup):
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(4))
-        yahoo_page.tab_to_next_field()   #tab to the Confirm Password field, to load the error message
+        yahoo_page.tab_to_next_field()   #tab to the Confirm Password field is needed to load the error message
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"WEAK_PASSWORD")  
         self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess.")
 
-
     def test_long_password_error_message(self):
         """ 
-        Confirm the entered password is one character longer than the required minimum length.
+        Confirm the entered password is one character longer than the required minimum length to only produce a non-existent error message.
         Confirm error data does not pop up when the long password is entered.
         Confirm there is no error text popping up 
 
         acceptance criteria   
         --------------------
-        -When a password that is too long is entered data error does not exist and
+        -When a password that is longer is entered data error does not exist and
         the error text does not appears
         """
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(9))       
-        yahoo_page.tab_to_next_field()      #tab to the Confirm Password field, to load the error message
+        yahoo_page.tab_to_next_field()      
 
-        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")    # or None)
+        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")     #or None)    # or None)
         self.assertEqual(yahoo_page.password_error_message().text,"")
 
 if __name__ == "__main__": unittest.main()

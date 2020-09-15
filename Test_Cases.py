@@ -7,7 +7,7 @@ class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
     
-        self.driver = webdriver.Chrome(options=options1)  
+        self.driver = webdriver.Chrome(options=options)  
         self.yahoo_page = Yahoo_Page(self.driver)      
 
     def tearDown(self):

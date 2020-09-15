@@ -23,16 +23,16 @@ def fix_cookies():
 
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
-options1 = Options()
-options1.add_argument('load-extension=' + path_to_extension)
-#options1.add_argument(fix_cookies())
-#options1.add_argument('--hide-scrollbars')
-#options1.add_argument('headless')
-options1.add_argument('--no-sandbox')
-options1.add_argument('disable-gpu')        #GPU graphical processing unit
-options1.add_argument('window-size=1920x1080')  #fixes the hover__over_originals_drop_down 
-options1.add_argument('--log-level=3')
-#options1.set_headless
+options = Options()
+options.add_argument('load-extension=' + path_to_extension)
+#options.add_argument(fix_cookies())
+#options.add_argument('--hide-scrollbars')
+options.add_argument('headless')
+options.add_argument('--no-sandbox')
+options.add_argument('disable-gpu')        #GPU graphical processing unit
+options.add_argument('window-size=1920x1080')  #fixes the hover__over_originals_drop_down 
+options.add_argument('--log-level=3')
+#options.set_headless
 #options.add_argument('load-extension=' + path_to_extension) #the extension is adBlocker, this allows navigation without adds hiding
 #options.set_headless(headless=True)
 
@@ -122,8 +122,12 @@ class Yahoo_Page():
 
     #Drop Downs
 
-    def click_profile_menu(self):
-        self.driver.find_element_by_xpath('//label[@role="presentation"]').click() #label[contains(@for,"AccountMenu")]/span').click()   # this xpath or this?  //input[contains(@id,"AccountMenu")]/following-sibling::label
+    def hover_over_profile_menu(self):
+        profile_menu_loc = (By.XPATH,'//label[@role="presentation"]')
+        wait(self.driver,15).until(EC.visibility_of_element_located(profile_menu_loc))
+        #wait(self.driver,15).until(EC.element_to_be_clickable(profile_menu_loc))
+        profile_menu_element = self.driver.find_element(*profile_menu_loc)                     #label[contains(@for,"AccountMenu")]/span').click()   # this xpath or this?  //input[contains(@id,"AccountMenu")]/following-sibling::label
+        ActionChains(self.driver).move_to_element(profile_menu_element).perform()
 
     def click_profile_menu_settings(self):
         setting_link_loc = (By.LINK_TEXT,'Settings')
@@ -188,7 +192,7 @@ class Yahoo_Page():
         self.pop_up_apperears_tab_off_it() 
 
     def navigate_to_security_tab(self):
-        self.click_profile_menu()
+        self.hover_over_profile_menu()
         self.click_profile_menu_settings()
         self.click_account_security_tab()
 

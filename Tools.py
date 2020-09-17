@@ -1,11 +1,13 @@
 #Useful python tools
 import string
 import random
+from random import choice
 import time
+
 
 class Tools():
     
-    def generate_randon_number_with_excluded_nums(self,max_num,ex_num1=None,ex_num2=None,ex_num3=None,ex_num4=None,ex_num5=None,ex_num6=None,ex_num7=None):
+    def generate_random_number_with_excluded_nums(self,max_num,ex_num1=None,ex_num2=None,ex_num3=None,ex_num4=None,ex_num5=None,ex_num6=None,ex_num7=None):
         num =None
         while num == None or num == ex_num1 or num == ex_num2 or num == ex_num3 or num == ex_num4 or num == ex_num5 or num == ex_num6 or num == ex_num7:
             num = random.randrange(max_num)

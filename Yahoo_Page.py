@@ -14,12 +14,10 @@ path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
 options = Options()
 options.add_argument('headless')
-options.add_argument('load-extension=' + path_to_extension)
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-#options.add_argument('--no-sandbox')
-#options.add_argument('disable-gpu')        
-options.add_argument('window-size=1920x1080') #this is needed for headless hover over originals drop down, and maximize is needed for non-headless hover. hmmmm??
-#options.add_argument('--log-level=3')
+options.add_argument('load-extension=' + path_to_extension)     #adblocker extension 
+options.add_experimental_option('excludeSwitches', ['enable-logging'])  #line not necessary, ignores DevTools listening on output 
+options.add_argument('window-size=1920x1080') #this is needed for the hover over method in headless mode.
+
 
 
 class Yahoo_Page():
@@ -130,13 +128,11 @@ class Yahoo_Page():
         wait(self.driver,15).until(EC.visibility_of_all_elements_located(all_options_loc))
         all_options = self.driver.find_elements(*all_options_loc)
         #options that vary their internal links and are therefore not included in selecting a random option are, index # = Title: 2 = Baby Brain, 6 = 2020 Candidate Tracker
-        random_option = all_options[Tools().generate_randon_number_with_excluded_nums(9,2,6)]   #Arguments (max_num,excluded_num1,excluded_num2)
+        random_option = all_options[Tools().generate_random_number_with_excluded_nums(9,2,6)]   #Arguments (max_num,excluded_num1,excluded_num2)
         self._random_option_title = random_option.get_attribute('title')
         _url_before_click= self.driver.current_url
         random_option.click()
         wait(self.driver,15).until(EC.url_changes(_url_before_click))
-    
-    def _random_option_title(self):     return self._rand_option_title
 
     #Links
 

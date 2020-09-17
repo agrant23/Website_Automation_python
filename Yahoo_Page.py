@@ -15,10 +15,11 @@ path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 options = Options()
 options.add_argument('headless')
 options.add_argument('load-extension=' + path_to_extension)
-options.add_argument('--no-sandbox')
-options.add_argument('disable-gpu')        
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+#options.add_argument('--no-sandbox')
+#options.add_argument('disable-gpu')        
 options.add_argument('window-size=1920x1080') #this is needed for headless hover over originals drop down, and maximize is needed for non-headless hover. hmmmm??
-options.add_argument('--log-level=3')
+#options.add_argument('--log-level=3')
 
 
 class Yahoo_Page():

@@ -7,12 +7,19 @@ import time
 
 class Tools():
     
-    def generate_random_number_with_excluded_nums(self,max_num,ex_num1=None,ex_num2=None,ex_num3=None,ex_num4=None,ex_num5=None,ex_num6=None,ex_num7=None):
-        num =None
-        while num == None or num == ex_num1 or num == ex_num2 or num == ex_num3 or num == ex_num4 or num == ex_num5 or num == ex_num6 or num == ex_num7:
-            num = random.randrange(max_num)
-        return num
-
+    def generate_random_num_with_excluded_nums(self,min_range, max_range,*excluded_nums):
+        return choice([i for i in range(min_range,max_range) if i not in excluded_nums])
+    
+    def get_corresponding_value_from_key(self,dictionary,_key):
+        value1 = ""
+        for key, value in dictionary.items():
+            try:
+                if key == _key:
+                    value1 = value
+            except:
+                raise NameError(_key + " not a key")    
+        return value1
+    
     #String Manipulation
 
     def generate_random_string(self,excluded_chars, string_len):
@@ -21,25 +28,9 @@ class Tools():
             random_string = ''.join(random.choice(string_chars) for x in range(string_len))
         return random_string
 
-    def del_replace_words_and_spaces_of_string(self, string_in, new_space_char=None, word_del1=None, word_del2=None, word_del3=None, word_del4=None, word_rep1=None,with_word_repl1=None,word_rep2=None,with_word_repl2=None):
-        _string_in = str.lower(string_in)
-        word_list = _string_in.split(' ')
-        string_out = ""
-        for word in word_list:
-            if word == word_del1 or word == word_del2 or word == word_del3 or word == word_del4:     
-                del(word)
-            elif word == word_rep1:  # or word == word_rep2:
-                del(word)
-                string_out = string_out + with_word_repl1 + new_space_char
-            elif word == word_rep2:
-                del(word)
-                string_out = string_out + with_word_repl2 + new_space_char
-            else:
-                string_out = string_out + word + new_space_char
-        return string_out[ :-1: ]                           #[ :-1: ] cuts off the last character of the output string which is the character replacing the last space
 
+    #Unused Methods
 
-    
     """
     The method below takes a WebElement as input. It will then toggle the border and background colors
     red and yellow for 2 seconds. Running this will allow you to see very clearly what element,
@@ -66,3 +57,23 @@ class Tools():
             time.sleep(.2)
             count += 1
         apply_style(original_style)
+
+    #String Manipulation
+    
+    def del_replace_words_and_spaces_of_string(self, string_in, new_space_char=None, word_del1=None, word_del2=None, word_del3=None, word_del4=None, word_rep1=None,with_word_repl1=None,word_rep2=None,with_word_repl2=None):
+        _string_in = str.lower(string_in)
+        word_list = _string_in.split(' ')
+        string_out = ""
+        for word in word_list:
+            if word == word_del1 or word == word_del2 or word == word_del3 or word == word_del4:     
+                del(word)
+            elif word == word_rep1:
+                del(word)
+                string_out = string_out + with_word_repl1 + new_space_char
+            elif word == word_rep2:
+                del(word)
+                string_out = string_out + with_word_repl2 + new_space_char
+            else:
+                string_out = string_out + word + new_space_char
+        return string_out[ :-1: ]
+

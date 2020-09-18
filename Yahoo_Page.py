@@ -7,7 +7,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import Secure 
 import time
-import string
 from Tools import *
 
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
@@ -17,21 +16,18 @@ options.add_argument('headless')
 options.add_argument('load-extension=' + path_to_extension)     #adblocker extension 
 options.add_experimental_option('excludeSwitches', ['enable-logging'])  #line not necessary, ignores DevTools listening on output 
 options.add_argument('window-size=1920x1080') #this is needed for the hover over method in headless mode.
-
+options.add_argument('disable-gpu')
 
 
 class Yahoo_Page():
 
     def __init__(self,driver):
+        self.random_option_title = ""
         self.driver = driver
         driver.get("https://www.yahoo.com")
 
         #after loading adBlock extension it opens in a new windows tab, this tabs to the yahoo window tab 
-        self.switch_to_yahoo_tab()          
-
-    def switch_to_yahoo_tab(self):     
-        yahoo_window = self.driver.window_handles[0]
-        self.driver.switch_to.window(yahoo_window)
+        self.switch_to_yahoo_window_tab()          
 
     #Buttons
 
@@ -75,7 +71,7 @@ class Yahoo_Page():
     def input_new_password_field(self,newPassWord):   self.new_password_field().send_keys(newPassWord)
     
     def search_field(self):
-        search_field_loc = (By.XPATH,"//form/input[@type='text']")  #or //form[@role='search']/input[@type='text']
+        search_field_loc = (By.ID,'ybar-sbq')
         wait(self.driver,15).until(EC.presence_of_element_located(search_field_loc))
         return self.driver.find_element(*search_field_loc)        
     def search_field_id(self):      return self.search_field().get_attribute('id')
@@ -127,12 +123,12 @@ class Yahoo_Page():
         all_options_loc = (By.XPATH,'//a[@title="Originals"]/following-sibling::div//a') #//a[contains(@class,"nr-subnav-link")]')
         wait(self.driver,15).until(EC.visibility_of_all_elements_located(all_options_loc))
         all_options = self.driver.find_elements(*all_options_loc)
-        #options that vary their internal links and are therefore not included in selecting a random option are, index # = Title: 2 = Baby Brain, 6 = 2020 Candidate Tracker
-        random_option = all_options[Tools().generate_random_number_with_excluded_nums(9,2,6)]   #Arguments (max_num,excluded_num1,excluded_num2)
-        self._random_option_title = random_option.get_attribute('title')
-        _url_before_click= self.driver.current_url
+        excluded_num = [2]   #not including the option that varies it's internal link, 2 = Baby Brain
+        random_option = all_options[Tools().generate_random_num_with_excluded_nums(0,10,excluded_num)] 
+        self.random_option_title = random_option.get_attribute('title')
+        url_before_click= self.driver.current_url
         random_option.click()
-        wait(self.driver,15).until(EC.url_changes(_url_before_click))
+        wait(self.driver,15).until(EC.url_changes(url_before_click))
 
     #Links
 
@@ -168,3 +164,9 @@ class Yahoo_Page():
         password_status_loc = (By.ID,'cpwd-error-password')
         password_status_element = wait(self.driver,15).until(EC.presence_of_element_located(password_status_loc)) 
         return password_status_element
+
+    #Special Functions
+
+    def switch_to_yahoo_window_tab(self):     
+        yahoo_window = self.driver.window_handles[0]
+        self.driver.switch_to.window(yahoo_window)

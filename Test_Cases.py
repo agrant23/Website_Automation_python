@@ -18,12 +18,12 @@ class HomePageSetup(unittest.TestCase):
 class Search(HomePageSetup):
     """
     Confirm the cursor is present in the Search field after the yahoo home page is opened.
-    After an arbitrary input is given to the search field confirm that clicking the search icon navigates
+    After an arbitrary input is given to the search field confirm that clicking the search button navigates
     the user to the search page.
 
     acceptance criteria   
     --------------------
-    -The cursur is in the search field after the yahoo home page is opened.
+    -The cursor is in the search field after the yahoo home page is opened.
     -When the search field is given an input, the user is navigated to the search page.
     """
     def test_cursur_on_search_field(self):
@@ -34,30 +34,29 @@ class Search(HomePageSetup):
         
         self.yahoo_page.input_search_field('Kendrick Lamar')
         self.yahoo_page.click_search_button()
-        self.assertIn('search' or 'search?', self.driver.current_url,
-            '\nSearch: ' + self.yahoo_page.search_field_contents())  #recommended to do this for all asserts?
+        self.assertIn('search', self.driver.current_url,
+            '\nSearch of: ' + self.yahoo_page.search_field_contents() + "failed")
 
 
 class Dynamic_Drop_Down(HomePageSetup):
     """
     For the Originals drop down menu within yahoo news;
-    ensure this drop down's options sends the user to the correlating site.
+    ensure that clicking on this drop down's options sends the user to the correlating site.
 
     acceptance criteria   
     --------------------
-    -When the link is clicked the user is sent to a different site.
-    -The site's url or title has a similar title to that of the text on the drop down option.
+    -The title of the Originals drop down options is similar to that of the correlating site.
     """
-    def convert_option_title_to_url_block(self,drop_down_option_title):
-        replace_space = '-'
-        del_word1 = 'the'
-        del_word2 = 'column'
-        del_word3 = 'series'
-        replace_word1 = 'presidential'
-        with_word1 = 'presidents'
-        replace_word2 = 'leadership'
-        with_word2 = 'lead'
-        return Tools().del_replace_words_and_spaces_of_string(drop_down_option_title,replace_space, del_word1, del_word2, del_word3,None, replace_word1,with_word1, replace_word2,with_word2)
+    def convert_option_title_to_url_block(self,option_title):
+
+        option_title_url_block_dict = {'The 360':'360' , 'Skullduggery':'skullduggery',
+                                       'California Wildfires':'california-wildfires',
+                                       'Conspiracyland':'conspiracyland' , '2020 Vision Column':'2020-vision',
+                                       '2020 Candidate Tracker':'elections' , 'The Ideas Election':'the-ideas-election',
+                                       'Presidential Leadership Series':'when-presidents-lead' ,
+                                       'Through Her Eyes':'through-her-eyes'}
+        
+        return  Tools().get_corresponding_value_from_key(option_title_url_block_dict, option_title)
 
     def setUp(self):
         super().setUp()
@@ -68,19 +67,18 @@ class Dynamic_Drop_Down(HomePageSetup):
     def test_any_random_tab(self):  
         yahoo_page = self.yahoo_page
         yahoo_page.click_random_option_from_originals_drop_down()
-        self.assertNotEqual(self.driver.title,'Yahoo News - Latest News & Headlines')
-        self.assertIn(self.convert_option_title_to_url_block(yahoo_page._random_option_title),self.driver.current_url)
+        self.assertIn(self.convert_option_title_to_url_block(yahoo_page.random_option_title),self.driver.current_url)
 
 
 class Log_In_Link(HomePageSetup):
 
     def test_log_in_link(self):
         """ 
-        Confirm the sign in (or logi) internal link is correct 
+        Confirm the log in internal link is correct. 
 
         acceptance criteria   
         --------------------
-        -After clicking the sign in button the browser's URL is on the login page 
+        -After clicking the sign in button, the URL has changed to the login page. 
         """
 
         self.yahoo_page.click_sign_in_button()
@@ -98,11 +96,11 @@ class Password_Link(HomePageSetup):
 
     def test_change_password_link(self):
         """ 
-        Confirm the change password internal link is correct 
+        Confirm the change password internal link is correct. 
 
         acceptance criteria   
         --------------------
-        -After clicking the change password button the browser's URL is on the change password page 
+        -After clicking the change password button, the URL has changed to the login page. 
         """
 
         self.yahoo_page.click_change_password_link()
@@ -124,39 +122,46 @@ class Error_Message_Passwords(HomePageSetup):
 
     def test_short_password_error_message(self):
         """ 
-        Confirm the entered password is one character short of required minimum length.
-        Confirm error data pops up when the short password is entered.
-        Confirm the resulting error text matches the current sentence/wording. 
+        Confirm that when the password is one character short of the minimum length required, the error data is present.
+        Confirm the resulting error text is the same as before. 
 
         acceptance criteria   
         --------------------
-        -When a password that is too short is entered data error exists,
-        the error text appears and is the same as it is now 08/08/2020
+        -When a password that is one character too short is entered,
+        the data error does exist and the error text does appear.
+
+        Note
+        --------------------
+        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring.  
         """     
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(4))
+        yahoo_page.input_new_password_field(self.random_password(5))
         yahoo_page.tab_to_next_field()   #tab to the Confirm Password field is needed to load the error message
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"WEAK_PASSWORD")  
         self.assertEqual(yahoo_page.password_error_message().text,"Your password is too easy to guess.")
 
     def test_long_password_error_message(self):
         """ 
-        Confirm the entered password is one character longer than the required minimum length to only produce a non-existent error message.
-        Confirm error data does not pop up when the long password is entered.
-        Confirm there is no error text popping up 
+        Confirm that when the password is one character longer than the maximum length allowed, the error data is not present.
+        Confirm there is no error text after entering a password of sufficient length.
 
         acceptance criteria   
         --------------------
-        -When a password that is longer is entered data error does not exist and
-        the error text does not appears
+        -When a password that is one character too long is entered,
+        the data error does not exist and the error text does not appears.
+
+        Note
+        --------------------
+        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring.  
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(9))       
+        yahoo_page.input_new_password_field(self.random_password(10))       
         yahoo_page.tab_to_next_field()      
 
-        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")     #or None)    # or None)
-        self.assertEqual(yahoo_page.password_error_message().text,"")
+        self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")
+        self.assertTrue(yahoo_page.password_error_message().text=="" or yahoo_page.password_error_message().text==None,
+                        "\n" + yahoo_page.password_error_message().text + ' appeared instead of an empty string or None')
 
 if __name__ == "__main__": unittest.main()

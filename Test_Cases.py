@@ -3,6 +3,10 @@ import time
 from Yahoo_Page import *
 from Tools import *
 
+yahoo_test_suite
+
+class HomePageSetup(unittest.TestCase):
+yahoo_test_suite_near_complete
 
 class HomePageSetup(unittest.TestCase):
 

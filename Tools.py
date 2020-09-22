@@ -1,4 +1,3 @@
-#Useful python tools
 import string
 import random
 from random import choice
@@ -8,9 +7,9 @@ import time
 class Tools():
     
     def generate_random_num_with_excluded_nums(self,min_range, max_range,*excluded_nums):
-        return choice([i for i in range(min_range,max_range) if i not in excluded_nums])
+        return choice([num for num in range(min_range,max_range) if num not in excluded_nums])
     
-    def get_corresponding_value_from_key(self,dictionary,_key):
+    def dictionay_value_from_key(self,dictionary,_key):
         value1 = ""
         for key, value in dictionary.items():
             try:
@@ -36,7 +35,7 @@ class Tools():
     red and yellow for 2 seconds. Running this will allow you to see very clearly what element,
     if any, your automation is targeting. If no element flashes on the screen, either its not selecting
     anything, or there is a visibility issue. You may have overlapping elements on the screen that mask
-    the element you are targeting.
+    the element you are targeting. Good for diagnosing an element that is not clicking.
     """
     def highlight(self,element):
         """Highlights a Selenium WebDriver element to indicate successful selector targeting."""
@@ -58,8 +57,8 @@ class Tools():
             count += 1
         apply_style(original_style)
 
-    #String Manipulation
-    
+
+
     def del_replace_words_and_spaces_of_string(self, string_in, new_space_char=None, word_del1=None, word_del2=None, word_del3=None, word_del4=None, word_rep1=None,with_word_repl1=None,word_rep2=None,with_word_repl2=None):
         _string_in = str.lower(string_in)
         word_list = _string_in.split(' ')

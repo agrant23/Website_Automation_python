@@ -45,23 +45,24 @@ class Dynamic_Drop_Down(HomePageSetup):
 
     acceptance criteria   
     --------------------
-    -The title of the Originals drop down options is similar to that of the correlating site.
+    -The title of the Originals drop down options is similar to that of the correlating site, given by the provided dictionary.
     """
     def convert_option_title_to_url_block(self,option_title):
 
-        option_title_url_block_dict = {'The 360':'360' , 'Skullduggery':'skullduggery',
+                                    #Dictionary of option title as the key and the corresponding url block as the value.
+        dict_option_title_url_block = {'The 360':'360' , 'Skullduggery':'skullduggery',
                                        'California Wildfires':'california-wildfires',
                                        'Conspiracyland':'conspiracyland' , '2020 Vision Column':'2020-vision',
                                        '2020 Candidate Tracker':'elections' , 'The Ideas Election':'the-ideas-election',
                                        'Presidential Leadership Series':'when-presidents-lead' ,
                                        'Through Her Eyes':'through-her-eyes'}
         
-        return  Tools().get_corresponding_value_from_key(option_title_url_block_dict, option_title)
+        return  Tools().dictionary_value_from_key(dict_option_title_url_block, option_title)
 
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        self.driver.maximize_window()       #this is needed to be able to see and hover over the originals drop down tab
+        self.driver.maximize_window()       #This is needed to be able to see and hover over the originals drop down tab.
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):  

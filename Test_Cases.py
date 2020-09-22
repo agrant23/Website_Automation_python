@@ -57,12 +57,12 @@ class Dynamic_Drop_Down(HomePageSetup):
                                        'Presidential Leadership Series':'when-presidents-lead' ,
                                        'Through Her Eyes':'through-her-eyes'}
         
-        return  Tools().dictionary_value_from_key(dict_option_title_url_block, option_title)
+        return  dict_option_title_url_block.setdefault(option_title, "The option title does not match any key in the provided dictionary")
 
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        self.driver.maximize_window()       #This is needed to be able to see and hover over the originals drop down tab.
+        self.driver.maximize_window()       #This is needed to be able to see and hover over the originals drop down tab when in headed mode.
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):  

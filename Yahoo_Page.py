@@ -12,10 +12,10 @@ from Tools import *
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
 options = Options()
-options.add_argument('headless')
-options.add_argument('load-extension=' + path_to_extension)     #adblocker extension 
-options.add_experimental_option('excludeSwitches', ['enable-logging'])  #line not necessary, ignores DevTools listening on output 
-options.add_argument('window-size=1920x1080') #this is needed for the hover over method in headless mode.
+#options.add_argument('headless')
+options.add_argument('load-extension=' + path_to_extension)     #adblocker extension to hide ads that obscured elements
+options.add_experimental_option('excludeSwitches', ['enable-logging'])  #this line is not necessary, it ignores DevTools that appear on the output 
+options.add_argument('window-size=1920x1080') #this is needed for the hover over method when in headless mode
 options.add_argument('disable-gpu')
 
 
@@ -96,7 +96,7 @@ class Yahoo_Page():
     #Drop Downs
 
     def hover_over_profile_menu(self):
-        profile_menu_loc = (By.XPATH,'//label[@role="presentation"]')                       #label[contains(@for,"AccountMenu")]/span').click()   # this xpath or this?  //input[contains(@id,"AccountMenu")]/following-sibling::label
+        profile_menu_loc = (By.XPATH,'//label[@role="presentation"]')
         wait(self.driver,15).until(EC.visibility_of_element_located(profile_menu_loc))
         profile_menu_element = self.driver.find_element(*profile_menu_loc)                     
         ActionChains(self.driver).move_to_element(profile_menu_element).perform()
@@ -120,10 +120,10 @@ class Yahoo_Page():
         self.driver.find_element(*account_security_loc).click()
 
     def click_random_option_from_originals_drop_down(self):
-        all_options_loc = (By.XPATH,'//a[@title="Originals"]/following-sibling::div//a') #//a[contains(@class,"nr-subnav-link")]')
+        all_options_loc = (By.XPATH,'//a[@title="Originals"]/following-sibling::div//a')
         wait(self.driver,15).until(EC.visibility_of_all_elements_located(all_options_loc))
         all_options = self.driver.find_elements(*all_options_loc)
-        excluded_num = [2]   #not including the option that varies it's internal link, 2 = Baby Brain
+        excluded_num = [2]   #list index of 2 is Baby Brain option title, this is not including as an option because it consistently changes its internal link's url.
         random_option = all_options[Tools().generate_random_num_with_excluded_nums(0,10,excluded_num)] 
         self.random_option_title = random_option.get_attribute('title')
         url_before_click= self.driver.current_url

@@ -12,7 +12,7 @@ from Tools import *
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
 options = Options()
-#options.add_argument('headless')
+options.add_argument('headless')
 options.add_argument('load-extension=' + path_to_extension)     #adblocker extension to hide ads that obscured elements
 options.add_experimental_option('excludeSwitches', ['enable-logging'])  #this line is not necessary, it ignores DevTools that appear on the output 
 options.add_argument('window-size=1920x1080') #this is needed for the hover over method when in headless mode
@@ -34,7 +34,9 @@ class Yahoo_Page():
     def click_sign_in_button(self):
         sign_in_button_loc = (By.LINK_TEXT,'Sign in')                                          
         wait(self.driver,15).until(EC.element_to_be_clickable(sign_in_button_loc))
+        _url_before_click = self.driver.current_url
         self.driver.find_element(*sign_in_button_loc).click()
+        wait(self.driver,15).until(EC.url_changes(_url_before_click))
     
     def click_username_next_button(self):      
         username_next_button_loc = (By.ID,"login-signin") 

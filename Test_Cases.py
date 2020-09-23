@@ -123,7 +123,7 @@ class Error_Message_Passwords(HomePageSetup):
 
     def test_short_password_error_message(self):
         """ 
-        Confirm that when the password is one character short of the minimum length required, the error data is present.
+        Confirm that when the password is shorter than the minimum length required, the error data is present.
         Confirm the resulting error text is the same as before. 
 
         acceptance criteria   
@@ -144,7 +144,7 @@ class Error_Message_Passwords(HomePageSetup):
 
     def test_long_password_error_message(self):
         """ 
-        Confirm that when the password is one character longer than the maximum length allowed, the error data is not present.
+        Confirm that when the password longer than the maximum length allowed, the error data is not present.
         Confirm there is no error text after entering a password of sufficient length.
 
         acceptance criteria   

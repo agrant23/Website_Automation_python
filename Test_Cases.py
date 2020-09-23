@@ -57,7 +57,8 @@ class Dynamic_Drop_Down(HomePageSetup):
                                        'Presidential Leadership Series':'when-presidents-lead' ,
                                        'Through Her Eyes':'through-her-eyes'}
         
-        return  dict_option_title_url_block.setdefault(option_title, "The option title does not match any key in the provided dictionary")
+        return  dict_option_title_url_block.setdefault(option_title,
+                                                        "The option title " + option_title + " does not match any key in the provided dictionary")
 
     def setUp(self):
         super().setUp()
@@ -101,7 +102,11 @@ class Password_Link(HomePageSetup):
 
         acceptance criteria   
         --------------------
-        -After clicking the change password button, the URL has changed to the login page. 
+        -After clicking the change password button, the URL has changed to the login page.
+
+        Note
+        --------------------
+        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring out.   
         """
 
         self.yahoo_page.click_change_password_link()
@@ -133,7 +138,7 @@ class Error_Message_Passwords(HomePageSetup):
 
         Note
         --------------------
-        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring.  
+        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring out.  
         """     
         yahoo_page = self.yahoo_page
 
@@ -154,7 +159,7 @@ class Error_Message_Passwords(HomePageSetup):
 
         Note
         --------------------
-        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring.  
+        -Yahoo security will randomly ask to "prove you are not a robot". Which, at times, is responsible for this test erroring out.  
         """
         yahoo_page = self.yahoo_page
 

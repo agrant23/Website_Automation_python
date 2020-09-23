@@ -5,16 +5,16 @@ from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-import Secure 
+import Settings 
 import time
 from Tools import *
 
 path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
 options = Options()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('load-extension=' + path_to_extension)     #adblocker extension to hide ads that obscured elements
-options.add_experimental_option('excludeSwitches', ['enable-logging'])  #this line is not necessary, it ignores DevTools that appear on the output 
+options.add_experimental_option('excludeSwitches', ['enable-logging']) # it ignores DevTools that appear on the output 
 options.add_argument('window-size=1920x1080') #this is needed for the hover over method when in headless mode
 options.add_argument('disable-gpu')
 
@@ -149,9 +149,9 @@ class Yahoo_Page():
 
     def login(self):
         self.click_sign_in_button()
-        self.input_username_field(Secure.yahoo_username) 
+        self.input_username_field(Settings.yahoo_username) 
         self.click_username_next_button()
-        self.input_password_field(Secure.yahoo_password)
+        self.input_password_field(Settings.yahoo_password)
         self.click_password_next_button()
         self.pop_up_apperears_tab_off_it() 
 

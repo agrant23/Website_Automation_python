@@ -6,15 +6,15 @@ import time
 
 class Tools():
     
-    def generate_random_num_with_excluded_nums(self,min_range, max_range,*excluded_nums):
-        return choice([num for num in range(min_range,max_range) if num not in excluded_nums])
+    def generate_random_num(self,min_range, max_range,excluded_nums=[None]): #exclusive range
+        return choice([num for num in range(min_range-1,max_range) if num not in excluded_nums])
     
     #String Manipulation
 
-    def generate_random_string(self,excluded_chars, string_len):
+    def generate_random_string(self, string_len, excluded_chars=str(None)):
         for char in excluded_chars: 
-            string_chars = string.printable.replace(char,'')
-            random_string = ''.join(random.choice(string_chars) for x in range(string_len))
+            all_string_chars = string.printable.replace(char,'')
+            random_string = ''.join(random.choice(all_string_chars) for i in range(string_len))
         return random_string
 
 

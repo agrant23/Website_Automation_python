@@ -9,25 +9,27 @@ import Settings
 import time
 from Tools import *
 
-path_to_extension = r'C:\Webdrivers.Extensions\3.9_0'
 
 options = Options()
 #options.add_argument('headless')
-options.add_argument('load-extension=' + path_to_extension)     #adblocker extension to hide ads that obscured elements
-options.add_experimental_option('excludeSwitches', ['enable-logging']) # it ignores DevTools that appear on the output 
-options.add_argument('window-size=1920x1080') #this is needed for the hover over method when in headless mode
+options.add_argument('load-extension=' + Settings.path_to_adBlock)            #adblocker extension to hide ads that obscured elements
+options.add_experimental_option('excludeSwitches', ['enable-logging']) #This ignores the DevTools output from ChromiumDeiver of Selenium
+options.add_argument('window-size=1920x1080')                          #this is needed for the hover over method when in headless mode
 options.add_argument('disable-gpu')
 
 
 class Yahoo_Page():
 
     def __init__(self,driver):
-        self.random_option_title = ""
         self.driver = driver
         driver.get("https://www.yahoo.com")
 
         #after loading adBlock extension it opens in a new windows tab, this tabs to the yahoo window tab 
         self.switch_to_yahoo_window_tab()          
+
+    #Class Variable/s
+
+    random_option_title = ""
 
     #Buttons
 
@@ -126,7 +128,7 @@ class Yahoo_Page():
         wait(self.driver,15).until(EC.visibility_of_all_elements_located(all_options_loc))
         all_options = self.driver.find_elements(*all_options_loc)
         excluded_num = [2]   #list index of 2 is Baby Brain option title, this is not including as an option because it consistently changes its internal link's url.
-        random_option = all_options[Tools().generate_random_num_with_excluded_nums(0,10,excluded_num)] 
+        random_option = all_options[Tools().generate_random_num(1,10,excluded_num)] 
         self.random_option_title = random_option.get_attribute('title')
         url_before_click= self.driver.current_url
         random_option.click()

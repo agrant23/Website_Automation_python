@@ -1,14 +1,14 @@
 import unittest
-import time
 from Yahoo_Page import *
 from Tools import *
+import Settings 
 
 
 class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
     
-        self.driver = webdriver.Chrome(options=options)  
+        self.driver = webdriver.Chrome(Settings.path_to_webdriver, options=options)  
         self.yahoo_page = Yahoo_Page(self.driver)      
 
     def tearDown(self):
@@ -35,7 +35,7 @@ class Search(HomePageSetup):
         self.yahoo_page.input_search_field('Kendrick Lamar')
         self.yahoo_page.click_search_button()
         self.assertIn('search', self.driver.current_url,
-            '\nSearch of: ' + self.yahoo_page.search_field_contents() + "failed")
+            '\nSearch of: ' + self.yahoo_page.search_field_contents() + " is not in the " + self.driver.current_url + " URL")
 
 
 class Dynamic_Drop_Down(HomePageSetup):
@@ -45,21 +45,9 @@ class Dynamic_Drop_Down(HomePageSetup):
 
     acceptance criteria   
     --------------------
-    -The title of the Originals drop down options is similar to that of the correlating site, given by the provided dictionary.
+    -The title of the Originals drop down options sends the user to the given by the provided dictionary.
     """
-    def convert_option_title_to_url_block(self,option_title):
-
-                                    #Dictionary of option title as the key and the corresponding url block as the value.
-        dict_option_title_url_block = {'The 360':'360' , 'Skullduggery':'skullduggery',
-                                       'California Wildfires':'california-wildfires',
-                                       'Conspiracyland':'conspiracyland' , '2020 Vision Column':'2020-vision',
-                                       '2020 Candidate Tracker':'elections' , 'The Ideas Election':'the-ideas-election',
-                                       'Presidential Leadership Series':'when-presidents-lead' ,
-                                       'Through Her Eyes':'through-her-eyes'}
         
-        return  dict_option_title_url_block.setdefault(option_title,
-                                                        "The option title " + option_title + " does not match any key in the provided dictionary")
-
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
@@ -67,9 +55,16 @@ class Dynamic_Drop_Down(HomePageSetup):
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):  
+                                            #Dictionary of option title as the key and the corresponding url block as the value.
+        dict_option_title_url_block =  {'The 360':'360' , 'Skullduggery':'skullduggery',
+                                        'California Wildfires':'california-wildfires',
+                                        'Conspiracyland':'conspiracyland' , '2020 Vision Column':'2020-vision',
+                                        '2020 Candidate Tracker':'elections' , 'The Ideas Election':'the-ideas-election',
+                                        'Presidential Leadership Series':'when-presidents-lead' ,
+                                        'Through Her Eyes':'through-her-eyes'}
         yahoo_page = self.yahoo_page
         yahoo_page.click_random_option_from_originals_drop_down()
-        self.assertIn(self.convert_option_title_to_url_block(yahoo_page.random_option_title),self.driver.current_url)
+        self.assertIn(dict_option_title_url_block[yahoo_page.random_option_title],self.driver.current_url)
 
 
 class Log_In_Link(HomePageSetup):
@@ -117,7 +112,7 @@ class Error_Message_Passwords(HomePageSetup):
 
     def random_password(self, password_len): 
         excluded_password_chars = ['\n','\t','\r','\x0b','\x0c']                
-        return Tools().generate_random_string(excluded_password_chars, password_len)
+        return Tools().generate_random_string(password_len, excluded_password_chars)
 
     def setUp(self):
         super().setUp()
@@ -163,11 +158,12 @@ class Error_Message_Passwords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(10))       
+        yahoo_page.input_new_password_field(self.random_password(11))       
         yahoo_page.tab_to_next_field()      
 
         self.assertEqual(yahoo_page.password_error_message().get_attribute('data-error'),"")
         self.assertTrue(yahoo_page.password_error_message().text=="" or yahoo_page.password_error_message().text==None,
                         "\n" + yahoo_page.password_error_message().text + ' appeared instead of an empty string or None')
+        #The assertTrue above is necessary due to the error messaging returning both an empty string and None. Using an AssertEqual does not work with logic operators
 
 if __name__ == "__main__": unittest.main()

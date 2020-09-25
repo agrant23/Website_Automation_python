@@ -9,7 +9,7 @@ To run the test cases Password_Link and Error_Message_Passwords you will need to
 
 
 Notes
-•	The Password_Link and Error_Message_Passwords test Cases can error due to the Yahoo site’s security checks. At times, the site will ask to prove you are not a robot or will say it noticed strange behavior on the account, which creates a time out error. This rarely happens the first time the tests are ran, this security check increases in frequency the more the site is logged into. In short it should run without erroring the first time the suite is ran. This is also noted in the docstring. 
+•	The Password_Link and Error_Message_Passwords test Cases can error due to the Yahoo site’s security checks. At times, the site will ask to prove you are not a robot or will say it noticed strange behavior on the account, which creates a time out error. The first time the tests are ran this rarely happens, this security check increases in frequency the more the site is logged into. In short it should run without erroring the first time the suite is ran. This is also noted in the docstring. 
 
 •	For the Error_Message_Passwords test case I have a short password and long password that are far apart in lengths. I realize in production the lengths would likely be closer together and the criteria for a test like this would be provided in which I would need to meet this criteria. 
 
@@ -17,4 +17,4 @@ Notes
 
 
 A personal note
-I hope you like this code, I enjoy constructive criticism so feel free to provide any. I have comments that explain why I wrote code that I feel needed clarification. If any code needs further explanation, please let me know. I enjoyed this project and I hope to meet you in person. 
+I hope you like this code, I enjoy constructive criticism so feel free to provide any. I have comments that give clarification on why some of my code is necessary. If any code needs further explanation, please let me know. I enjoyed this project and I hope to meet with you in person.

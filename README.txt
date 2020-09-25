@@ -1,5 +1,5 @@
 To Run
-Navigate to the root directory of the repository and run "python Yahoo_Test_Suite.py". This works automatically on Windows 10 with ChromeDriver 85, adblocker and using Python 3.8.
+Navigate to the root directory of the repository and run "python yahoo_test_suite.py". This works automatically on Windows 10 with ChromeDriver 85, adblocker and using Python 3.8.
 
 To facilitate running this on another OS, I included a Settings.py file and a Resources directory. In Resources you will find an adblocker directory with a folder called 3.9_0 (the version of the extension). If you cloned my repo then you only need to copy the path of the contents of the 3.9_0 folder and paste this into the adblocker_path variable within the Settings.py file. Also, in resources you will find different webDrivers. Choose your webDriver and follow the same process of copying the path, but this time with the chromedriver file included at the end of the path, then paste this into the Settings.py file variable. 
 

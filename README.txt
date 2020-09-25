@@ -5,7 +5,7 @@ To facilitate running this on another OS, I included a Settings.py file and a Re
 
 Note: I successfully ran the suite using a Mac, however if you receive a wrong permissions error you may need to download the mac ChromeDriver from https://chromedriver.chromium.org/ . I did not attempt running the test suite on Linux, but I plan too. 
 
-To run the test cases Password_Link and Error_Message_Passwords you will need to create a yahoo account and copy your username and password in the variables provided in the Settings.py file. 
+To run the test cases Password_Link and Error_Message_Passwords you will need to create a yahoo account and copy your username and password into the variables provided in the Settings.py file. 
 
 
 Notes

@@ -11,7 +11,7 @@ from Tools import *
 
 
 options = Options()
-#options.add_argument('headless')
+options.add_argument('headless')
 options.add_argument('load-extension=' + Settings.path_to_adBlock)            #adblocker extension to hide ads that obscured elements
 options.add_experimental_option('excludeSwitches', ['enable-logging']) #This ignores the DevTools output from ChromiumDeiver of Selenium
 options.add_argument('window-size=1920x1080')                          #this is needed for the hover over method when in headless mode

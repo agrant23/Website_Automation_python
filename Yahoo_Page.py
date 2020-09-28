@@ -50,9 +50,9 @@ class Yahoo_Page():
     def click_search_button(self):  
         search_button_loc = (By.XPATH,'//input[@type="submit"]')
         wait(self.driver, 15).until(EC.element_to_be_clickable(search_button_loc))
-        _url_before_click = self.driver.current_url
+        url_before_click = self.driver.current_url
         self.driver.find_element(*search_button_loc).click()
-        wait(self.driver,15).until(EC.url_changes(_url_before_click))
+        wait(self.driver,15).until(EC.url_changes(url_before_click))
 
     #Fields
 

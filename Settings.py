@@ -1,13 +1,13 @@
-path_to_adBlock = r"C:\Repositories\Website_Automation_python\Resources\adblocker\3.9_0"
-path_to_webdriver = r"C:\Repositories\Website_Automation_python\Resources\windows chromedriver\chromedriver.exe"
+path_to_adBlock = r"your\path\here\Resources\adblocker\3.9_0"
+path_to_webdriver = r"your\path\here\chromedriver.exe"
 
-yahoo_username = "anthonygrant414@yahoo.com"
-yahoo_password = "yellow613@"
+yahoo_username = ""
+yahoo_password = ""
 
 
 
 #this is just for me, my Secure.py file is in .gitignore
-''' try:
+try:
     from Secure import *
 except Exception:
-    pass '''
+    pass

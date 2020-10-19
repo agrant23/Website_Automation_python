@@ -1,4 +1,5 @@
 import string
+import re
 import random
 from random import choice
 import time
@@ -12,9 +13,8 @@ class Tools():
     #String Manipulation
 
     def generate_random_string(self, string_len, excluded_chars=str(None)):
-        for char in excluded_chars: 
-            all_string_chars = string.printable.replace(char,'')
-            random_string = ''.join(random.choice(all_string_chars) for i in range(string_len))
+        clean_string = re.sub("|".join(excluded_chars),"",string.printable)
+        random_string = ''.join(random.choice(clean_string) for i in range(string_len))
         return random_string
 
 

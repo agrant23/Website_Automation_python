@@ -1,5 +1,5 @@
-path_to_adBlock = r""
-path_to_webdriver = r""
+path_to_adBlock = r"your\path\here\Resources\adblocker\3.9_0"
+path_to_webdriver = r"your\path\here\chromedriver.exe"
 
 yahoo_username = ""
 yahoo_password = ""

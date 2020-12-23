@@ -6,7 +6,7 @@ import time
 
 
 class Tools():
-    
+
     def generate_random_num(self,min_range, max_range,excluded_nums=[None]): #exclusive range
         return choice([num for num in range(min_range-1,max_range) if num not in excluded_nums])
     

@@ -2,7 +2,7 @@ path_to_adBlock = r"C:\Repositories\Website_Automation_python\Resources\adblocke
 path_to_webdriver = r"C:\Repositories\Website_Automation_python\Resources\windows chromedriver\chromedriver.exe"
 
 yahoo_username = "anthonygrant414@yahoo.com"
-yahoo_password = "yellow613@"
+yahoo_password = "yellow613@G!24"
 
 
 

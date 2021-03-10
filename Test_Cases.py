@@ -1,27 +1,30 @@
 from selenium.webdriver.chrome.service import Service  #fix for Selenium 4
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
 import unittest
-from Yahoo_Page import *
-from Tools import *
-import Settings
+from Yahoo_Page import YahooPage
+import Tools as tools
+import Settings as settings
 import time
 
 
 class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
-        s = Service(Settings.path_to_webdriver)
+        options = YahooPage.options
+        s = Service(settings.path_to_webdriver)
         self.driver = webdriver.Chrome(service=s, options=options)
-        self.yahoo_page = Yahoo_Page(self.driver)
+        self.yahoo_page = YahooPage(self.driver)
 
     def tearDown(self):
         self.driver.quit()
 
 
-class Error_Message_Passwords(HomePageSetup):
+class ErrorMessagePasswords(HomePageSetup):
 
     def random_password(self, password_len):
         excluded_password_chars = ['\n', '\t', '\r', '\x0b', '\x0c']
-        return Tools().generate_random_string(
+        return tools.generate_random_string(
             password_len, excluded_password_chars)
 
     def setUp(self):
@@ -52,9 +55,9 @@ class Error_Message_Passwords(HomePageSetup):
 
         yahoo_page.input_new_password_field(self.random_password(5))
 
-        self.assertEqual(yahoo_page.password_error_message().
+        self.assertEqual(yahoo_page.short_password_error_message().
                          get_attribute('data-error'), "WEAK_PASSWORD")
-        self.assertEqual(yahoo_page.password_error_message().text,
+        self.assertEqual(yahoo_page.short_password_error_message().text,
                          "- Your password is too easy to guess.")
 
     def test_moderate_password_error_message(self):
@@ -135,7 +138,7 @@ class Search(HomePageSetup):
                       + " is not in the " + self.driver.current_url + " URL")
 
 
-class Dynamic_Drop_Down(HomePageSetup):
+class DynamicDropDown(HomePageSetup):
     """
     For the Originals drop down menu within yahoo news; ensure that
     clicking on this drop down's options sends the user to the
@@ -165,7 +168,7 @@ class Dynamic_Drop_Down(HomePageSetup):
             yahoo_page.random_option_title], self.driver.current_url)
 
 
-class Log_In_Link(HomePageSetup):
+class LogInLink(HomePageSetup):
 
     def test_log_in_link(self):
         """
@@ -181,7 +184,7 @@ class Log_In_Link(HomePageSetup):
         self.assertIn('login', self.driver.current_url)
 
 
-class Password_Link(HomePageSetup):
+class PasswordLink(HomePageSetup):
 
     def setUp(self):
         super().setUp()

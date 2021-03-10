@@ -6,23 +6,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
-import Settings
+import Settings as settings
 import time
-from Tools import *
+import Tools as tools
 
 
-options = Options()
-options.add_argument('headless')
-#adblocker extension is needed to hide ads that obscured elements
-options.add_argument('load-extension=' + Settings.path_to_adBlock)
-#the option below ignores the DevTools output from ChromiumDeiver of Selenium
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-#the option below is needed for the hover over method when in headless mode
-options.add_argument('window-size=1920x1080')
-options.add_argument('disable-gpu')
+class YahooPage():
 
-
-class Yahoo_Page():
+    options = Options()
+    #options.add_argument('headless')
+    #adblocker extension is needed to hide ads that obscured elements
+    options.add_argument('load-extension=' + settings.path_to_adBlock)
+    #option below ignores the DevTools output from ChromiumDeiver of Selenium
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    #option below is needed for the hover over method when in headless mode
+    options.add_argument('window-size=1920x1080')
+    options.add_argument('disable-gpu')
 
     def __init__(self, driver):
         self.driver = driver
@@ -38,7 +37,7 @@ class Yahoo_Page():
 
     #Error Messages
 
-    def password_error_message(self):
+    def short_password_error_message(self):
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
         password_status_element = wait(self.driver, 15).until(
@@ -49,7 +48,7 @@ class Yahoo_Page():
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
         password_status_changes_from_Weak = (
-            Tools().attribute_changes_in_element(
+            tools.attribute_changes_in_element(
                 password_status_loc, "data-error", 'WEAK_PASSWORD'))
         try:
             wait(self.driver, 15).until(password_status_changes_from_Weak)
@@ -62,10 +61,10 @@ class Yahoo_Page():
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
         password_status_changes_from_Weak = (
-            Tools().attribute_changes_in_element(
+            tools.attribute_changes_in_element(
                 password_status_loc, "data-error", 'WEAK_PASSWORD'))
         password_status_changes_from_Mod = (
-            Tools().attribute_changes_in_element(
+            tools.attribute_changes_in_element(
                 password_status_loc, "data-error", 'ALMOST_THERE'))
         try:
             wait(self.driver, 15).until(password_status_changes_from_Weak)
@@ -119,7 +118,7 @@ class Yahoo_Page():
     def password_field(self):
         password_field_loc = (By.XPATH, "//input[@name='password']")
         wait(self.driver, 15).until(
-            EC.presence_of_element_located(password_field_loc))
+            EC.visibility_of_element_located(password_field_loc))
         return self.driver.find_element(*password_field_loc)
 
     def input_password_field(self, passWord):
@@ -128,7 +127,7 @@ class Yahoo_Page():
     def new_password_field(self):
         new_password_field_loc = (By.XPATH, "//input[@name='password']")
         wait(self.driver, 15).until(
-            EC.presence_of_element_located(new_password_field_loc))
+            EC.visibility_of_element_located(new_password_field_loc))
         return self.driver.find_element(*new_password_field_loc)
 
     def input_new_password_field(self, newPassWord):
@@ -204,7 +203,7 @@ class Yahoo_Page():
         all_options = self.driver.find_elements(*all_options_loc)
         #excluded_num = ['tab number'], an exclusion list was needed for past
         #options because it consistently changed its internal link's url.
-        random_option = all_options[Tools().generate_random_num(1, 3)]
+        random_option = all_options[tools.generate_random_num(1, 3)]
         self.random_option_title = random_option.get_attribute('title')
         url_before_click = self.driver.current_url
         random_option.click()
@@ -230,9 +229,9 @@ class Yahoo_Page():
 
     def login(self):
         self.click_sign_in_button()
-        self.input_username_field(Settings.yahoo_username)
+        self.input_username_field(settings.yahoo_username)
         self.click_username_next_button()
-        self.input_password_field(Settings.yahoo_password)
+        self.input_password_field(settings.yahoo_password)
         self.click_password_next_button()
         self.pop_up_apperears_tab_off_it()
 

@@ -6,68 +6,66 @@ from random import choice
 import time
 
 
-class Tools():
+def generate_random_num(min_range, max_range, excluded_nums=[None]):
+    return choice([num for num in range(min_range-1, max_range)
+                  if num not in excluded_nums])
 
-    def generate_random_num(self, min_range, max_range, excluded_nums=[None]):
-        return choice([num for num in range(min_range-1, max_range)
-                      if num not in excluded_nums])
+#String Manipulation
 
-    #String Manipulation
+def generate_random_string(string_len, excluded_chars=str(None)):
+    clean_string = re.sub("|".join(excluded_chars), "", string.printable)
+    random_string = ''.join(random.choice(clean_string)
+                            for i in range(string_len))
+    return random_string
 
-    def generate_random_string(self, string_len, excluded_chars=str(None)):
-        clean_string = re.sub("|".join(excluded_chars), "", string.printable)
-        random_string = ''.join(random.choice(clean_string)
-                                for i in range(string_len))
-        return random_string
+#Expected Condition
 
-    #Expected Condition
-
-    def attribute_changes_in_element(
-              self, locator, attribute_type, attribute_value_to_change):
-        """
-        An expectated condition to check that an attribute's value for a
-        specificed element has changed from the attribute_value_to_change
-        """
-        def _predicate(driver):
-            try:
-                attribute_value = driver.find_element(*locator).get_attribute(
-                    attribute_type)
-                return attribute_value != attribute_value_to_change
-            except StaleElementReferenceException:
-                return False
-
-        return _predicate
-
-    #Unused Method
-
+def attribute_changes_in_element(
+          locator, attribute_type, attribute_value_to_change):
     """
-    The method below takes a WebElement as input. It will then toggle
-    the border and background colors red and yellow for 2 seconds.
-    Running this will allow you to see very clearly what element, if
-    any, your automation is targeting. If no element flashes on the
-    screen, either its not selecting anything, or there is a visibility
-    issue. You may have overlapping elements on the screen that mask the
-    element you are targeting. Good for diagnosing an element that is
-    not clicking.
+    An expectated condition to check that an attribute's value for a
+    specificed element has changed from the attribute_value_to_change
     """
-    def highlight(self, element):
-        driver = element._parent
+    def _predicate(driver):
+        try:
+            attribute_value = driver.find_element(*locator).get_attribute(
+                attribute_type)
+            return attribute_value != attribute_value_to_change
+        except StaleElementReferenceException:
+            return False
 
-        def apply_style(s):
-            driver.execute_script(
-               "arguments[0].setAttribute('style', arguments[1]);", element, s)
-        original_style = element.get_attribute('style')
-        count = 0
-        colors = ['yellow', 'red']
-        while count < 10:
-            if ((count % 2) == 0):
-                background = colors[0]
-                border = colors[1]
-            else:
-                background = colors[1]
-                border = colors[0]
-            apply_style(
-                "background: %s; border: 2px solid %s;" % (background, border))
-            time.sleep(.2)
-            count += 1
-        apply_style(original_style)
+    return _predicate
+
+#Unused Method
+
+"""
+The method below takes a WebElement as input. It will then toggle
+the border and background colors red and yellow for 2 seconds.
+Running this will allow you to see very clearly what element, if
+any, your automation is targeting. If no element flashes on the
+screen, either its not selecting anything, or there is a visibility
+issue. You may have overlapping elements on the screen that mask the
+element you are targeting. Good for diagnosing an element that is
+not clicking.
+"""
+def highlight(element):
+    driver = element._parent
+
+    def apply_style(s):
+        driver.execute_script(
+           "arguments[0].setAttribute('style', arguments[1]);", element, s)
+    original_style = element.get_attribute('style')
+    count = 0
+    colors = ['yellow', 'red']
+    while count < 10:
+        if ((count % 2) == 0):
+            background = colors[0]
+            border = colors[1]
+        else:
+            background = colors[1]
+            border = colors[0]
+        apply_style(
+            "background: %s; border: 2px solid %s;" % (background, border))
+        time.sleep(.2)
+        count += 1
+    apply_style(original_style)

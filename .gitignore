@@ -2,3 +2,5 @@
 __pycache__
 Secure.py
 sandbox.py
+.env
+.vscode/settings.json

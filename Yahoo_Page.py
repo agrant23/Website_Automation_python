@@ -5,13 +5,14 @@ from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-import Settings 
+from selenium.common.exceptions import TimeoutException
+import Settings
 import time
 from Tools import *
 
 
 options = Options()
-#options.add_argument('headless')
+options.add_argument('headless')
 #adblocker extension is needed to hide ads that obscured elements
 options.add_argument('load-extension=' + Settings.path_to_adBlock)
 #the option below ignores the DevTools output from ChromiumDeiver of Selenium
@@ -23,184 +24,225 @@ options.add_argument('disable-gpu')
 
 class Yahoo_Page():
 
-    def __init__(self,driver):
+    def __init__(self, driver):
         self.driver = driver
         driver.get("https://www.yahoo.com")
 
         #after loading adBlock extension it opens in a new windows tab,
-        #this tabs to the yahoo window 
-        self.switch_to_yahoo_window_tab()          
+        #this tabs to the yahoo window
+        self.switch_to_yahoo_window_tab()
 
     #Class Variable/s
 
     random_option_title = ""
 
+    #Error Messages
+
+    def password_error_message(self):
+        password_status_loc = (
+            By.XPATH, '//span[contains(@id,"error-password-msg")]')
+        password_status_element = wait(self.driver, 15).until(
+            EC.presence_of_element_located(password_status_loc))
+        return password_status_element
+
+    def moderate_password_error_message(self):
+        password_status_loc = (
+            By.XPATH, '//span[contains(@id,"error-password-msg")]')
+        password_status_changes_from_Weak = (
+            Tools().attribute_changes_in_element(
+                password_status_loc, "data-error", 'WEAK_PASSWORD'))
+        try:
+            wait(self.driver, 15).until(password_status_changes_from_Weak)
+        except TimeoutException:
+            print("time out error occured because the password status" +
+                  " did not change from weak status to moderate status")
+        return self.driver.find_element(*password_status_loc)
+
+    def long_password_error_message(self):
+        password_status_loc = (
+            By.XPATH, '//span[contains(@id,"error-password-msg")]')
+        password_status_changes_from_Weak = (
+            Tools().attribute_changes_in_element(
+                password_status_loc, "data-error", 'WEAK_PASSWORD'))
+        password_status_changes_from_Mod = (
+            Tools().attribute_changes_in_element(
+                password_status_loc, "data-error", 'ALMOST_THERE'))
+        try:
+            wait(self.driver, 15).until(password_status_changes_from_Weak)
+            wait(self.driver, 15).until(password_status_changes_from_Mod)
+        except TimeoutException:
+            print("time out error occured because the password status did " +
+                  "not change from weak status to moderate status or moderate "
+                  + "status to strong status")
+        return self.driver.find_element(*password_status_loc)
+
     #Buttons
 
     def click_sign_in_button(self):
-        sign_in_button_loc = (By.LINK_TEXT,'Sign in')                                          
-        wait(self.driver,15).until(
+        sign_in_button_loc = (By.LINK_TEXT, 'Sign in')
+        wait(self.driver, 15).until(
             EC.element_to_be_clickable(sign_in_button_loc))
         url_before_click = self.driver.current_url
         self.driver.find_element(*sign_in_button_loc).click()
-        wait(self.driver,15).until(EC.url_changes(url_before_click))
-    
-    def click_username_next_button(self):      
-        username_next_button_loc = (By.ID,"login-signin") 
+        wait(self.driver, 15).until(EC.url_changes(url_before_click))
+
+    def click_username_next_button(self):
+        username_next_button_loc = (By.ID, "login-signin")
         wait(self.driver, 15).until(
             EC.element_to_be_clickable(username_next_button_loc))
         self.driver.find_element(*username_next_button_loc).click()
-        
-    def click_password_next_button(self):  
-        self.driver.find_element_by_class_name(
-            "button-container").find_element_by_id('login-signin').click()
-    
-    def click_search_button(self):  
-        search_button_loc = (By.XPATH,'//input[@type="submit"]')
+
+    def click_password_next_button(self):
+        self.driver.find_element(
+            By.CLASS_NAME, "button-container").find_element(
+            By.ID, 'login-signin').click()
+
+    def click_search_button(self):
+        search_button_loc = (By.XPATH, '//input[@type="submit"]')
         wait(self.driver, 15).until(
             EC.element_to_be_clickable(search_button_loc))
         url_before_click = self.driver.current_url
         self.driver.find_element(*search_button_loc).click()
-        wait(self.driver,15).until(EC.url_changes(url_before_click))
+        wait(self.driver, 15).until(EC.url_changes(url_before_click))
 
     #Fields
 
     def username_field(self):
-        username_field_loc = (By.ID,'login-username')               
+        username_field_loc = (By.ID, 'login-username')
         wait(self.driver, 15).until(
             EC.presence_of_element_located(username_field_loc))
-        return self.driver.find_element(*username_field_loc)      
-    def input_username_field(self,userName):     
+        return self.driver.find_element(*username_field_loc)
+
+    def input_username_field(self, userName):
         self.username_field().send_keys(userName)
 
     def password_field(self):
-        password_field_loc = (By.XPATH,"//input[@name='password']")        
-        wait(self.driver,15).until(
-            EC.presence_of_element_located(password_field_loc))       
-        return self.driver.find_element(*password_field_loc)       
-    def input_password_field(self,passWord):     
+        password_field_loc = (By.XPATH, "//input[@name='password']")
+        wait(self.driver, 15).until(
+            EC.presence_of_element_located(password_field_loc))
+        return self.driver.find_element(*password_field_loc)
+
+    def input_password_field(self, passWord):
         self.password_field().send_keys(passWord)
 
     def new_password_field(self):
-        new_password_field_loc = (By.XPATH,"//input[@name='password']")
-        wait(self.driver,15).until(
+        new_password_field_loc = (By.XPATH, "//input[@name='password']")
+        wait(self.driver, 15).until(
             EC.presence_of_element_located(new_password_field_loc))
-        return self.driver.find_element(*new_password_field_loc)    
-    def input_new_password_field(self,newPassWord):   
+        return self.driver.find_element(*new_password_field_loc)
+
+    def input_new_password_field(self, newPassWord):
         self.new_password_field().send_keys(newPassWord)
-    
+
     def search_field(self):
-        search_field_loc = (By.ID,'ybar-sbq')
-        wait(self.driver,15).until(
+        search_field_loc = (By.ID, 'ybar-sbq')
+        wait(self.driver, 15).until(
             EC.presence_of_element_located(search_field_loc))
-        return self.driver.find_element(*search_field_loc)        
-    def search_field_id(self):      
+        return self.driver.find_element(*search_field_loc)
+
+    def search_field_id(self):
         return self.search_field().get_attribute('id')
-    def input_search_field(self,search):    
+
+    def input_search_field(self, search):
         self.search_field().send_keys(search)
-    
+
     #Field Attributes
 
     def current_cursor_id(self):
         return self.driver.switch_to.active_element.get_attribute('id')
 
-    def search_field_contents(self):    
-        return self.driver.find_element_by_xpath(
-            '//input[@type="text"]').get_attribute('value')
+    def search_field_contents(self):
+        return self.driver.find_element(
+            By.XPATH, '//input[@type="text"]').get_attribute('value')
 
     #Popup
 
     def pop_up_apperears_tab_off_it(self):
         wait(self.driver, 10).until(EC.url_changes('yahoo.com'))
-        current_tab = self.driver.current_window_handle                  
-        time.sleep(2)                                                           #this is needed to give the pop up time to load/appear. Outside of using drop box extensions this is the only way to handle this.  
-        self.driver.switch_to.window(current_tab)        
+        current_tab = self.driver.current_window_handle
+        #time.sleep(2) is needed to give the pop up time to appear. Outside of
+        #using drop box extensions this is the only way to handle this.
+        time.sleep(2)
+        self.driver.switch_to.window(current_tab)
 
     #Drop Downs
 
     def hover_over_profile_menu(self):
-        profile_menu_loc = (By.XPATH,'//label[@role="presentation"]')
-        wait(self.driver,15).until(
+        profile_menu_loc = (By.XPATH, '//label[@role="presentation"]')
+        wait(self.driver, 15).until(
             EC.visibility_of_element_located(profile_menu_loc))
-        profile_menu_element = self.driver.find_element(*profile_menu_loc)                     
+        profile_menu_element = self.driver.find_element(*profile_menu_loc)
         ActionChains(self.driver).move_to_element(
             profile_menu_element).perform()
 
     def click_profile_menu_settings(self):
-        setting_link_loc = (By.LINK_TEXT,'Settings')
-        wait(self.driver,15).until(
+        setting_link_loc = (By.LINK_TEXT, 'Settings')
+        wait(self.driver, 15).until(
             EC.element_to_be_clickable(setting_link_loc))
         self.driver.find_element(*setting_link_loc).click()
-    
+
     def hover_over_originals_drop_down(self):
-        originals_drop_down_loc = (By.XPATH,'//a[@title="Originals"]')
-        wait(self.driver,15).until(
+        originals_drop_down_loc = (By.XPATH, ' //a[@title="Originals"]')
+        wait(self.driver, 15).until(
             EC.visibility_of_element_located(originals_drop_down_loc))
         drop_down_element = self.driver.find_element(*originals_drop_down_loc)
         ActionChains(self.driver).move_to_element(drop_down_element).perform()
 
     #Tabs and Options
 
-    def click_account_security_tab(self):       
-        account_security_loc = (By.PARTIAL_LINK_TEXT,'Account Security')
-        wait(self.driver,15).until(
+    def click_account_security_tab(self):
+        account_security_loc = (By.PARTIAL_LINK_TEXT, 'Account Security')
+        wait(self.driver, 15).until(
             EC.presence_of_element_located(account_security_loc))
         self.driver.find_element(*account_security_loc).click()
 
     def click_random_option_from_originals_drop_down(self):
         all_options_loc = (
-            By.XPATH,'//a[@title="Originals"]/following-sibling::div//a')
-        wait(self.driver,15).until(
+            By.XPATH, '//a[@title="Originals"]/following-sibling::div//a')
+        wait(self.driver, 15).until(
             EC.visibility_of_all_elements_located(all_options_loc))
         all_options = self.driver.find_elements(*all_options_loc)
-                                                                                #excluded_num = ['tab number'], an exclusion list was needed for past options because it consistently changed its internal link's url.
-        random_option = all_options[Tools().generate_random_num(1,3)]           #,excluded_num)], add the excluded_num list here as shown in Tools
+        #excluded_num = ['tab number'], an exclusion list was needed for past
+        #options because it consistently changed its internal link's url.
+        random_option = all_options[Tools().generate_random_num(1, 3)]
         self.random_option_title = random_option.get_attribute('title')
-        url_before_click= self.driver.current_url
+        url_before_click = self.driver.current_url
         random_option.click()
-        wait(self.driver,15).until(EC.url_changes(url_before_click))
+        wait(self.driver, 15).until(EC.url_changes(url_before_click))
 
     #Links
 
     def click_change_password_link(self):
-        change_password_loc = (By.PARTIAL_LINK_TEXT,'Change password')
-        wait(self.driver,15).until(
+        change_password_loc = (By.PARTIAL_LINK_TEXT, 'Change password')
+        wait(self.driver, 15).until(
             EC.element_to_be_clickable(change_password_loc))
         self.driver.find_element(*change_password_loc).click()
 
-    def click_news_link(self):        
-        self.driver.find_element_by_link_text('News').click()
+    def click_news_link(self):
+        self.driver.find_element(By.LINK_TEXT, 'News').click()
 
     #Action Keys
 
-    def tab_to_next_field(self):  
-        ActionChains(self.driver).send_keys(Keys.TAB).perform() 
+    def tab_to_next_field(self):
+        ActionChains(self.driver).send_keys(Keys.TAB).perform()
 
     #User Flow
 
     def login(self):
         self.click_sign_in_button()
-        self.input_username_field(Settings.yahoo_username) 
+        self.input_username_field(Settings.yahoo_username)
         self.click_username_next_button()
         self.input_password_field(Settings.yahoo_password)
         self.click_password_next_button()
-        self.pop_up_apperears_tab_off_it() 
+        self.pop_up_apperears_tab_off_it()
 
     def navigate_to_security_tab(self):
         self.hover_over_profile_menu()
         self.click_profile_menu_settings()
         self.click_account_security_tab()
 
-    #Error Messages
-
-    def password_error_message(self):
-        password_status_loc = (By.ID,'cpwd-error-password')
-        password_status_element = wait(self.driver,15).until(
-            EC.presence_of_element_located(password_status_loc)) 
-        return password_status_element
-
     #Special Functions
 
-    def switch_to_yahoo_window_tab(self):     
+    def switch_to_yahoo_window_tab(self):
         yahoo_window = self.driver.window_handles[0]
         self.driver.switch_to.window(yahoo_window)

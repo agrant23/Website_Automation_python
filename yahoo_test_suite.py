@@ -14,8 +14,6 @@ suite.addTest(Error_Message_Passwords("test_short_password_error_message"))
 suite.addTest(Error_Message_Passwords("test_long_password_error_message"))
 
 
-
-
-if __name__ == "__main__": 
+if __name__ == "__main__":
     runner = unittest.TextTestRunner()
     runner.run(suite)

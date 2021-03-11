@@ -14,12 +14,12 @@ import Tools as tools
 class YahooPage():
 
     options = Options()
-    #options.add_argument('headless')
-    #adblocker extension is needed to hide ads that obscured elements
+    # options.add_argument('headless')
+    # adblocker extension is needed to hide ads that obscured elements
     options.add_argument('load-extension=' + settings.path_to_adBlock)
-    #option below ignores the DevTools output from ChromiumDeiver of Selenium
+    # option below ignores the DevTools output from ChromiumDeiver of Selenium
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    #option below is needed for the hover over method when in headless mode
+    # option below is needed for the hover over method when in headless mode
     options.add_argument('window-size=1920x1080')
     options.add_argument('disable-gpu')
 
@@ -27,15 +27,15 @@ class YahooPage():
         self.driver = driver
         driver.get("https://www.yahoo.com")
 
-        #after loading adBlock extension it opens in a new windows tab,
-        #this tabs to the yahoo window
+        # after loading adBlock extension it opens in a new windows tab,
+        # this tabs to the yahoo window
         self.switch_to_yahoo_window_tab()
 
-    #Class Variable/s
+    # Class Variable/s
 
     random_option_title = ""
 
-    #Error Messages
+    # Error Messages
 
     def short_password_error_message(self):
         password_status_loc = (
@@ -47,35 +47,14 @@ class YahooPage():
     def moderate_password_error_message(self):
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
-        password_status_changes_from_Weak = (
-            tools.attribute_changes_in_element(
-                password_status_loc, "data-error", 'WEAK_PASSWORD'))
-        try:
-            wait(self.driver, 15).until(password_status_changes_from_Weak)
-        except TimeoutException:
-            print("time out error occured because the password status" +
-                  " did not change from weak status to moderate status")
         return self.driver.find_element(*password_status_loc)
 
     def long_password_error_message(self):
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
-        password_status_changes_from_Weak = (
-            tools.attribute_changes_in_element(
-                password_status_loc, "data-error", 'WEAK_PASSWORD'))
-        password_status_changes_from_Mod = (
-            tools.attribute_changes_in_element(
-                password_status_loc, "data-error", 'ALMOST_THERE'))
-        try:
-            wait(self.driver, 15).until(password_status_changes_from_Weak)
-            wait(self.driver, 15).until(password_status_changes_from_Mod)
-        except TimeoutException:
-            print("time out error occured because the password status did " +
-                  "not change from weak status to moderate status or moderate "
-                  + "status to strong status")
         return self.driver.find_element(*password_status_loc)
 
-    #Buttons
+    # Buttons
 
     def click_sign_in_button(self):
         sign_in_button_loc = (By.LINK_TEXT, 'Sign in')
@@ -104,7 +83,7 @@ class YahooPage():
         self.driver.find_element(*search_button_loc).click()
         wait(self.driver, 15).until(EC.url_changes(url_before_click))
 
-    #Fields
+    # Fields
 
     def username_field(self):
         username_field_loc = (By.ID, 'login-username')
@@ -145,7 +124,7 @@ class YahooPage():
     def input_search_field(self, search):
         self.search_field().send_keys(search)
 
-    #Field Attributes
+    # Field Attributes
 
     def current_cursor_id(self):
         return self.driver.switch_to.active_element.get_attribute('id')
@@ -154,17 +133,17 @@ class YahooPage():
         return self.driver.find_element(
             By.XPATH, '//input[@type="text"]').get_attribute('value')
 
-    #Popup
+    # Popup
 
     def pop_up_apperears_tab_off_it(self):
         wait(self.driver, 10).until(EC.url_changes('yahoo.com'))
         current_tab = self.driver.current_window_handle
-        #time.sleep(2) is needed to give the pop up time to appear. Outside of
-        #using drop box extensions this is the only way to handle this.
+        # time.sleep(2) is needed to give the pop up time to appear. Outside of
+        # using drop box extensions this is the only way to handle this.
         time.sleep(2)
         self.driver.switch_to.window(current_tab)
 
-    #Drop Downs
+    # Drop Downs
 
     def hover_over_profile_menu(self):
         profile_menu_loc = (By.XPATH, '//label[@role="presentation"]')
@@ -187,7 +166,7 @@ class YahooPage():
         drop_down_element = self.driver.find_element(*originals_drop_down_loc)
         ActionChains(self.driver).move_to_element(drop_down_element).perform()
 
-    #Tabs and Options
+    # Tabs and Options
 
     def click_account_security_tab(self):
         account_security_loc = (By.PARTIAL_LINK_TEXT, 'Account Security')
@@ -201,15 +180,15 @@ class YahooPage():
         wait(self.driver, 15).until(
             EC.visibility_of_all_elements_located(all_options_loc))
         all_options = self.driver.find_elements(*all_options_loc)
-        #excluded_num = ['tab number'], an exclusion list was needed for past
-        #options because it consistently changed its internal link's url.
+        # excluded_num = ['tab number'], an exclusion list was needed for past
+        # options because it consistently changed its internal link's url.
         random_option = all_options[tools.generate_random_num(1, 3)]
         self.random_option_title = random_option.get_attribute('title')
         url_before_click = self.driver.current_url
         random_option.click()
         wait(self.driver, 15).until(EC.url_changes(url_before_click))
 
-    #Links
+    # Links
 
     def click_change_password_link(self):
         change_password_loc = (By.PARTIAL_LINK_TEXT, 'Change password')
@@ -220,12 +199,12 @@ class YahooPage():
     def click_news_link(self):
         self.driver.find_element(By.LINK_TEXT, 'News').click()
 
-    #Action Keys
+    # Action Keys
 
     def tab_to_next_field(self):
         ActionChains(self.driver).send_keys(Keys.TAB).perform()
 
-    #User Flow
+    # User Flow
 
     def login(self):
         self.click_sign_in_button()
@@ -240,7 +219,7 @@ class YahooPage():
         self.click_profile_menu_settings()
         self.click_account_security_tab()
 
-    #Special Functions
+    # Special Functions
 
     def switch_to_yahoo_window_tab(self):
         yahoo_window = self.driver.window_handles[0]

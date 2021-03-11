@@ -10,7 +10,8 @@ def generate_random_num(min_range, max_range, excluded_nums=[None]):
     return choice([num for num in range(min_range-1, max_range)
                   if num not in excluded_nums])
 
-#String Manipulation
+
+# String Manipulation
 
 def generate_random_string(string_len, excluded_chars=str(None)):
     clean_string = re.sub("|".join(excluded_chars), "", string.printable)
@@ -18,25 +19,33 @@ def generate_random_string(string_len, excluded_chars=str(None)):
                             for i in range(string_len))
     return random_string
 
-#Expected Condition
 
+# Unused Method
+
+# Expected Condition
+"""
+Note: this Expected Condition would return True if the
+previous_attribute_value is None or "". This is obvious but this is
+noteworthy. The waits that use this EC will stil pass or become obsolete
+if the HTTP code no longer changes from one from one attribute value to
+another.
+"""
 def attribute_changes_in_element(
-          locator, attribute_type, attribute_value_to_change):
+          locator, attribute_type, previous_attribute_value):
     """
     An expectated condition to check that an attribute's value for a
-    specificed element has changed from the attribute_value_to_change
+    specificed element has changed from the previous_attribute_value
     """
     def _predicate(driver):
         try:
             attribute_value = driver.find_element(*locator).get_attribute(
                 attribute_type)
-            return attribute_value != attribute_value_to_change
+            return attribute_value != previous_attribute_value
         except StaleElementReferenceException:
             return False
 
     return _predicate
 
-#Unused Method
 
 """
 The method below takes a WebElement as input. It will then toggle

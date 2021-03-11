@@ -1,4 +1,4 @@
-from selenium.webdriver.chrome.service import Service  #fix for Selenium 4
+from selenium.webdriver.chrome.service import Service  # fix for Selenium 4
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 import unittest
@@ -75,8 +75,9 @@ class ErrorMessagePasswords(HomePageSetup):
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(9))
+        time.sleep(0.75)  # Please look at the branch Explicit_Wait_ErrorMessagePasswords if you want to see why I used this implicit wait. This keeps my code clean and readable. No E.C.s exist that can wait for this dynamic element correctly for this specific test. So I created my own E.C; which you can see being used in the given branch. This E.C. is also in Tools in this repo.
 
-        self.assertEqual(yahoo_page.moderate_password_error_message().
+        self.assertEqual(yahoo_page.short_password_error_message().
                          get_attribute('data-error'), "ALMOST_THERE")
         self.assertEqual(yahoo_page.moderate_password_error_message().text,
                          "- Almost there.")
@@ -96,6 +97,7 @@ class ErrorMessagePasswords(HomePageSetup):
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(11))
+        time.sleep(1)  # The Explicit_Wait_ErrorMessagePasswords branch has some really cool stuff in it. But if you look at it you will see why I decided to use this implicit wait instead
 
         self.assertEqual(yahoo_page.long_password_error_message().
                          get_attribute('data-error'), "STRONG_PASSWORD")
@@ -105,9 +107,9 @@ class ErrorMessagePasswords(HomePageSetup):
                         "- you did it!", "\n"
                         + yahoo_page.long_password_error_message().text +
                         ' appeared intead of - you did it!')
-        #The assertTrue above is necessary due to the error messaging returning
-        #an empty string, None or a text.
-        #Logic operators does not work within AssertEqual
+        # The assertTrue above is necessary due to the error messaging
+        # returning an empty string, None or a text.
+        # Logic operators do not work within AssertEqual
 
 
 class Search(HomePageSetup):
@@ -153,12 +155,12 @@ class DynamicDropDown(HomePageSetup):
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        #Maximize is needed to hover over the originals tab in headed mode.
+        # Maximize is needed to hover over the originals tab in headed mode.
         self.driver.maximize_window()
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):
-        #Dictionary of option titles and corresponding url.
+        # Dictionary of option titles and corresponding url.
         dict_option_title_url_block = {'The 360': '360',
                                        'Skullduggery': 'skullduggery',
                                        'Conspiracyland': 'conspiracyland'}

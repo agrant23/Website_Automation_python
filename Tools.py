@@ -23,18 +23,19 @@ def generate_random_string(string_len, excluded_chars=str(None)):
 # Unused Method
 
 # Expected Condition
-"""
-Note: this Expected Condition would return True if the
-previous_attribute_value is None or "". This is obvious but this is
-noteworthy. The waits that use this EC will stil pass or become obsolete
-if the HTTP code no longer changes from one from one attribute value to
-another.
-"""
-def attribute_changes_in_element(
+def attribute_value_not_previous(
           locator, attribute_type, previous_attribute_value):
     """
     An expectated condition to check that an attribute's value for a
-    specificed element has changed from the previous_attribute_value
+    specificed element is not the previous_attribute_value
+    
+    Parameters
+    ----------
+    locator : a tuple used to find the element
+    attribute_type : string of the attribute type for the 
+                     previous_attribute_value
+    previous_attribute_value : string of the attribute value that is not any
+                               other attribute value
     """
     def _predicate(driver):
         try:

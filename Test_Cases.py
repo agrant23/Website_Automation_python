@@ -1,5 +1,3 @@
-from selenium.webdriver.chrome.service import Service  # fix for Selenium 4
-from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 import unittest
 from Yahoo_Page import YahooPage
@@ -12,8 +10,7 @@ class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
         options = YahooPage.options
-        s = Service(settings.path_to_webdriver)
-        self.driver = webdriver.Chrome(service=s, options=options)
+        self.driver = webdriver.Chrome(settings.path_to_webdriver, options=options)
         self.yahoo_page = YahooPage(self.driver)
 
     def tearDown(self):
@@ -36,14 +33,13 @@ class ErrorMessagePasswords(HomePageSetup):
 
     def test_short_password_error_message(self):
         """
-        Confirm that when the password is 8 characters that the data
-        error status is "WEAK_PASSWORD" Confirm the resulting error text
-        is "- Your password is too easy to guess."
+        Confirm that when the password is 8 characters that the resulting
+        error text is "- Your password is too easy to guess."
 
         acceptance criteria
         --------------------
-        -When an 8 character password is entered, the data error status
-         and the error text exhibit's this is too short of a password.
+        -When an 8 character password is entered, the error text
+         exhibit's this is too short of a password.
 
         Note
         --------------------
@@ -53,54 +49,44 @@ class ErrorMessagePasswords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(5))
+        yahoo_page.input_new_password_field(self.random_password(8))
 
-        self.assertEqual(yahoo_page.short_password_error_message().
-                         get_attribute('data-error'), "WEAK_PASSWORD")
         self.assertEqual(yahoo_page.short_password_error_message().text,
                          "- Your password is too easy to guess.")
 
     def test_moderate_password_error_message(self):
         """
-        Confirm that when the password 9 or 10 characters in length, the
-        error data status is "ALMOST_THERE". Confirm the resulting error
-        text is "- Almost there".
+        Confirm that when the password is 9 characters in length, the
+        error text is "- Almost there".
 
         acceptance criteria
         --------------------
-        -When a password that is between 9 and 10 characters is entered,
-         the data error status and the error text exhibit's this is a
-         moderate length for the password.
+        -When a password that is between 9 characters in lenght is
+         entered, the error text exhibit's this is a moderate length for
+         the password.
         """
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(9))
-        time.sleep(0.75)  # Please look at the branch Explicit_Wait_ErrorMessagePasswords if you want to see why I used this implicit wait. This keeps my code clean and readable. No E.C.s exist that can wait for this dynamic element correctly for this specific test. So I created my own E.C; which you can see being used in the given branch. This E.C. is also in Tools in this repo.
 
-        self.assertEqual(yahoo_page.short_password_error_message().
-                         get_attribute('data-error'), "ALMOST_THERE")
         self.assertEqual(yahoo_page.moderate_password_error_message().text,
                          "- Almost there.")
 
     def test_long_password_error_message(self):
         """
-        Confirm that when the password is 11 characters, the error data
-        status is "STRONG_PASSWORD". Confirm the resulting error text is
-        "- you did it!".
+        Confirm that when the password is 11 characters, the error text
+        is "- you did it!".
 
         acceptance criteria
         --------------------
-        -When a password that is 11 characters is entered, the data
-         error and error text either does not exist or it exhibits this
-         is a password of sufficient length.
+        -When a password that is 11 characters is entered the error text
+         either does not exist or it exhibits this is a password of
+         sufficient length.
         """
         yahoo_page = self.yahoo_page
 
         yahoo_page.input_new_password_field(self.random_password(11))
-        time.sleep(1)  # The Explicit_Wait_ErrorMessagePasswords branch has some really cool stuff in it. But if you look at it you will see why I decided to use this implicit wait instead
 
-        self.assertEqual(yahoo_page.long_password_error_message().
-                         get_attribute('data-error'), "STRONG_PASSWORD")
         self.assertTrue(yahoo_page.long_password_error_message().text == "" or
                         yahoo_page.long_password_error_message().text == None
                         or yahoo_page.long_password_error_message().text ==

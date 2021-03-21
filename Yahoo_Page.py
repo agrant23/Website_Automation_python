@@ -22,16 +22,16 @@ class YahooPage():
     options.add_argument('load-extension=' + settings.path_to_adBlock)
     # option below ignores the DevTools output from ChromiumDeiver of Selenium
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # option below is needed for the hover over method when in headless mode
+    # the remaining options below help when running in headless mode
     options.add_argument('--window-size=1920x1080')
     options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
     options.add_argument('--allow-running-insecure-content')
     options.add_argument('--proxy-server="direct://"')
     options.add_argument('--proxy-bypass-list=*')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--disable-web-security')
+    options.add_argument('--disable-blink-features=AutomationControlled')
 
     def __init__(self, driver):
         self.driver = driver
@@ -126,28 +126,16 @@ class YahooPage():
         self.username_field().send_keys(userName)
 
     def password_field(self):
-        # Below are locators for a dynaminc element that changes when the cursor
-        # appears on the password field. This required it's own wait's
-        password_field_loc1 = (
+        # Below is a locator for a dynaminc element that changes when the
+        # cursor appears on the password field. This required it's own wait's
+        password_field_loc = (
             By.XPATH, "//div[@class='input-group password-container focussed']")
-        password_field_loc2 = (
-            By.XPATH, "//div[@class='input-group password-container blurred']")
-        input_password_field_loc = (By.XPATH, "//input[@id='login-passwd']")
         try:
             wait(self.driver, 10).until(
-                EC.element_to_be_clickable(input_password_field_loc))
-            self.driver.find_element(*input_password_field_loc).click()
-        except:
-            try:
-                wait(self.driver, 10).until(
-                    EC.presence_of_element_located(password_field_loc1))
-            except:
-                try:
-                    wait(self.driver, 10).until(
-                        EC.presence_of_element_located(password_field_loc2))
-                except TimeoutException:
-                    self.driver.get_screenshot_as_file("screenshot.png")
-                    print("DARN IT")
+                            EC.presence_of_element_located(password_field_loc))
+        except TimeoutException:
+            self.driver.get_screenshot_as_file("screenshot1.png")
+        input_password_field_loc = (By.XPATH, "//input[@id='login-passwd']")
         return self.driver.find_element(*input_password_field_loc)
 
     def input_password_field(self, passWord):
@@ -198,11 +186,16 @@ class YahooPage():
     def hover_over_profile_menu(self):
         profile_menu_loc = (By.XPATH, '//label[@id="ybarAccountMenuOpener"]')
         time.sleep(2)   #3
-        wait(self.driver, 15).until(
-            EC.element_to_be_clickable(profile_menu_loc))
+        try:
+            wait(self.driver, 15).until(
+                EC.element_to_be_clickable(profile_menu_loc))
+        except TimeoutException:
+            self.driver.get_screenshot_as_file("screenshot.png")
+            print('hover over timeout error')
         profile_menu_element = self.driver.find_element(*profile_menu_loc)
         ActionChains(self.driver).move_to_element(
             profile_menu_element).perform()
+        
 
     def click_profile_menu_settings(self):
         setting_link_loc = (By.LINK_TEXT, 'Settings')

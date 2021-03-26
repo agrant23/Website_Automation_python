@@ -19,7 +19,7 @@ class HomePageSetup(unittest.TestCase):
 
 
 class ErrorMessagePasswords(HomePageSetup):
-    
+
     def random_password(self, length=int):
         excluded_password_chars = ['\n', '\t', '\r', '\x0b', '\x0c']
         return tools.generate_random_string(

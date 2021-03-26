@@ -15,7 +15,7 @@ Notes
 
 •	I avoided using time.sleep(), but because of the challenges of handling a pop up and the unavailability of development resources I used one time.sleep() in Yahoo_Page.py line 95. I understand that this is not optimal.
 
-•	In yahoo_page.py line 57 I use a wait for invisibility on a locator. The XPATH for that locator 'weak_password_status_loc' is not great concerning its longengevity in production. Another solution for that invisibility wait is in the diff_explicit_wait_ErrorMessagePasswords branch in this repository. In this branch I created my own Expected Condition that successfully waits for a dynamic element to not be its previous attribute value. This Expected Condition is also in this branch in tools.py under unused tools.
+•	In yahoo_page.py line 57 I use a wait for invisibility on a locator. The XPATHs for those locators in 'moderate_password_error_message' are not great concerning its longengevity in production. Another solution for that invisibility wait is in the my_explicit_wait_ErrorMessagePasswords branch in this repository. In this branch I created my own Expected Condition that successfully waits for a dynamic element to not be itcd s previous attribute value. This Expected Condition is also in this branch in tools.py under unused tools.
 
 
 A personal note

@@ -62,7 +62,7 @@ class ErrorMessagePasswords(HomePageSetup):
 
         acceptance criteria
         --------------------
-        -When a password that is 9 characters in lenght is entered, the
+        -When a password that is 9 characters in length is entered, the
          error text exhibit's this is a moderate length for the password.
         """
         yahoo_page = self.yahoo_page

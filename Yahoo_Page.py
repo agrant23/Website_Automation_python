@@ -1,48 +1,40 @@
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver import DesiredCapabilities
-import Settings as settings
+import settings
 import time
-import Tools as tools
+import tools
 
 
 class YahooPage():
 
     options = Options()
-    # Through screenshots I know that in headless mode the yahoo security feature 
-    # turns on. After attempting Many disabling options I unfortunately have to
-    # inform you, to ensure the code works error free you must disable headless
-    options.add_argument('headless')
+    # Through screenshots I know that when in headless mode the yahoo anti-bot
+    # detection stops naviagtion. Though the repo run's often, error free in
+    # headless mode, to run completely error free you must disable headless mode
+    options.add_argument('--headless')
     # adblocker extension is needed to hide ads that obscured elements
     options.add_argument('load-extension=' + settings.path_to_adBlock)
-    # option below ignores the DevTools output from ChromiumDeiver of Selenium
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     # the remaining options below help when running in headless mode
     options.add_argument('--window-size=1920x1080')
     options.add_argument('--disable-gpu')
-    options.add_argument('--allow-running-insecure-content')
-    options.add_argument('--proxy-server="direct://"')
     options.add_argument('--proxy-bypass-list=*')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--ignore-certificate-errors')
     options.add_argument('--disable-web-security')
-    options.add_argument('--disable-blink-features=AutomationControlled')
 
     def __init__(self, driver):
         self.driver = driver
         driver.get("https://www.yahoo.com")
 
-        #after loading adBlock extension it opens in a new windows tab,
-        #this tabs to the yahoo window
+        # after loading adBlock extension it opens in a new window's tab,
+        # this tabs to the yahoo window
         self.switch_to_yahoo_window_tab()
 
-    # Class Variable/s
-
+    # Class Variable:
     random_option_title = ""
 
     # Error Messages
@@ -55,33 +47,33 @@ class YahooPage():
         return password_status_element
 
     def moderate_password_error_message(self):
-        password_status_loc = (
-            By.XPATH, '//span[contains(@id,"error-password-msg")]')
         weak_password_status_loc = (By.XPATH,
-                                  '//span[@data-error="WEAK_PASSWORD"]')
+                                    '//span[@data-error="WEAK_PASSWORD"]')
         # the wait below is necessary since yahoo always shows the weak
-        # passord text before the moderate password text. I MADE my own
+        # passord text before the moderate password text. I Made My Own
         # explicit wait, for this problem, that can be seen in the
         # diff_explicit_wait_ErrorMessagePassword branch. In README.txt
         # there are more notes on the pros and cons of these two solutions
         wait(self.driver, 15).until(EC.invisibility_of_element_located(
                                                      weak_password_status_loc))
+        password_status_loc = (
+            By.XPATH, '//span[contains(@id,"error-password-msg")]')
         return self.driver.find_element(*password_status_loc)
 
     def long_password_error_message(self):
-        password_status_loc = (
-            By.XPATH, '//span[contains(@id,"error-password-msg")]')
         weak_password_status_loc = (By.XPATH,
-                                  '//span[@data-error="WEAK_PASSWORD"]')
+                                    '//span[@data-error="WEAK_PASSWORD"]')
         moderate_password_status_loc = (By.XPATH,
-                                  '//span[@data-error="ALMOST_THERE"]')
-        # Both of these waits are needed since yahoo always shows weak
-        # password then moderate password texts before hopefully showing
-        # the strong password text.
+                                        '//span[@data-error="ALMOST_THERE"]')
+        # Both waits are needed since yahoo always shows weak password
+        # then moderate password texts before, hopefully, showing the
+        # strong password text.
         wait(self.driver, 15).until(EC.invisibility_of_element_located(
                                                      weak_password_status_loc))
         wait(self.driver, 15).until(EC.invisibility_of_element_located(
                                                  moderate_password_status_loc))
+        password_status_loc = (
+            By.XPATH, '//span[contains(@id,"error-password-msg")]')
         return self.driver.find_element(*password_status_loc)
 
     # Buttons
@@ -99,7 +91,6 @@ class YahooPage():
         wait(self.driver, 15).until(
             EC.element_to_be_clickable(username_next_button_loc))
         self.driver.find_element(*username_next_button_loc).click()
-        #time.sleep(2)
 
     def click_password_next_button(self):
         self.driver.find_element(
@@ -127,14 +118,11 @@ class YahooPage():
 
     def password_field(self):
         # Below is a locator for a dynaminc element that changes when the
-        # cursor appears on the password field. This required it's own wait's
+        # cursor appears on the password field. This required its own waits
         password_field_loc = (
             By.XPATH, "//div[@class='input-group password-container focussed']")
-        try:
-            wait(self.driver, 10).until(
+        wait(self.driver, 10).until(
                             EC.presence_of_element_located(password_field_loc))
-        except TimeoutException:
-            self.driver.get_screenshot_as_file("screenshot1.png")
         input_password_field_loc = (By.XPATH, "//input[@id='login-passwd']")
         return self.driver.find_element(*input_password_field_loc)
 
@@ -185,17 +173,11 @@ class YahooPage():
 
     def hover_over_profile_menu(self):
         profile_menu_loc = (By.XPATH, '//label[@id="ybarAccountMenuOpener"]')
-        time.sleep(2)   #3
-        try:
-            wait(self.driver, 15).until(
-                EC.element_to_be_clickable(profile_menu_loc))
-        except TimeoutException:
-            self.driver.get_screenshot_as_file("screenshot.png")
-            print('hover over timeout error')
+        wait(self.driver, 15).until(
+                            EC.visibility_of_element_located(profile_menu_loc))
+        self.driver.get_screenshot_as_file("screenshot.png")
         profile_menu_element = self.driver.find_element(*profile_menu_loc)
-        ActionChains(self.driver).move_to_element(
-            profile_menu_element).perform()
-        
+        ActionChains(self.driver).move_to_element(profile_menu_element).perform()
 
     def click_profile_menu_settings(self):
         setting_link_loc = (By.LINK_TEXT, 'Settings')

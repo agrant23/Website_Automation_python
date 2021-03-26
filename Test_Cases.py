@@ -1,8 +1,8 @@
 from selenium import webdriver
 import unittest
-from Yahoo_Page import YahooPage
-import Tools as tools
-import Settings as settings
+from yahoo_page import YahooPage
+import tools
+import settings
 import time
 
 
@@ -10,7 +10,8 @@ class HomePageSetup(unittest.TestCase):
 
     def setUp(self):
         options = YahooPage.options
-        self.driver = webdriver.Chrome(settings.path_to_webdriver, options=options)
+        self.driver = webdriver.Chrome(
+                                   settings.path_to_webdriver, options=options)
         self.yahoo_page = YahooPage(self.driver)
 
     def tearDown(self):
@@ -19,10 +20,10 @@ class HomePageSetup(unittest.TestCase):
 
 class ErrorMessagePasswords(HomePageSetup):
 
-    def random_password(self, password_len):
+    def random_password(self, length=int):
         excluded_password_chars = ['\n', '\t', '\r', '\x0b', '\x0c']
         return tools.generate_random_string(
-            password_len, excluded_password_chars)
+                 length, excluded_chars=excluded_password_chars)
 
     def setUp(self):
         super().setUp()
@@ -38,7 +39,7 @@ class ErrorMessagePasswords(HomePageSetup):
 
         acceptance criteria
         --------------------
-        -When an 8 character password is entered, the error text
+        -When an 8-character password is entered, the error text
          exhibit's this is too short of a password.
 
         Note
@@ -49,7 +50,7 @@ class ErrorMessagePasswords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(8))
+        yahoo_page.input_new_password_field(self.random_password(length=8))
 
         self.assertEqual(yahoo_page.short_password_error_message().text,
                          "- Your password is too easy to guess.")
@@ -67,7 +68,7 @@ class ErrorMessagePasswords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(9))
+        yahoo_page.input_new_password_field(self.random_password(length=9))
 
         self.assertEqual(yahoo_page.moderate_password_error_message().text,
                          "- Almost there.")
@@ -85,7 +86,7 @@ class ErrorMessagePasswords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(11))
+        yahoo_page.input_new_password_field(self.random_password(length=11))
 
         self.assertTrue(yahoo_page.long_password_error_message().text == "" or
                         yahoo_page.long_password_error_message().text == None
@@ -94,8 +95,8 @@ class ErrorMessagePasswords(HomePageSetup):
                         + yahoo_page.long_password_error_message().text +
                         ' appeared intead of - you did it!')
         # The assertTrue above is necessary due to the error messaging
-        # returning an empty string, None or a text.
-        # Logic operators do not work within AssertEqual
+        # returning an empty string, None or a text. Logic operators do
+        # not work within AssertEqual, which is why this assert is different
 
 
 class Search(HomePageSetup):
@@ -128,7 +129,7 @@ class Search(HomePageSetup):
 
 class DynamicDropDown(HomePageSetup):
     """
-    For the Originals drop down menu within yahoo news; ensure that
+    For the Originals drop-down menu within yahoo news; ensure that
     clicking on this drop down's options sends the user to the
     correlating site.
 
@@ -141,12 +142,12 @@ class DynamicDropDown(HomePageSetup):
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        # Maximize is needed to hover over the originals tab in headed mode.
+        # Maximize is needed to hover over the originals tab.
         self.driver.maximize_window()
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):
-        # Dictionary of option titles and corresponding url.
+        # Dictionary of option titles and corresponding block of its URL.
         dict_option_title_url_block = {'The 360': '360',
                                        'Skullduggery': 'skullduggery',
                                        'Conspiracyland': 'conspiracyland'}
@@ -199,4 +200,5 @@ class PasswordLink(HomePageSetup):
         self.assertIn('change-password', self.driver.current_url)
 
 
-if __name__ == "__main__": unittest.main()
+if __name__ == "__main__":
+    unittest.main()

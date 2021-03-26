@@ -47,34 +47,53 @@ class YahooPage():
         return password_status_element
 
     def moderate_password_error_message(self):
-        weak_password_status_loc = (By.XPATH,
-                                    '//span[@data-error="WEAK_PASSWORD"]')
-        # the wait below is necessary since yahoo always shows the weak
-        # passord text before the moderate password text. I Made My Own
-        # explicit wait, for this problem, that can be seen in the
-        # diff_explicit_wait_ErrorMessagePassword branch. In README.txt
-        # there are more notes on the pros and cons of these two solutions
-        wait(self.driver, 15).until(EC.invisibility_of_element_located(
-                                                     weak_password_status_loc))
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
+        #Here I use my tool to get the expected condition that the 'data-error'
+        #attribute value is not 'WEAK_PASSWORD'
+        password_status_changes_from_Weak = (
+            tools.attribute_changes_in_element(
+                password_status_loc, "data-error", 'WEAK_PASSWORD'))
+        #Because the 'data-error' element is dynamic and always changes from
+        #'Weak_PASSWORD' to 'ALMOST_THERE' the wait below is needed to wait
+        #for this transition, without it the 'ALMOST_THERE' value would never
+        #seen as that element attribute's value
+        try:
+            wait(self.driver, 15).until(password_status_changes_from_Weak)
+        except TimeoutException:
+            print("time out error occured because the password status" +
+                  " did not change from weak status to moderate status")
         return self.driver.find_element(*password_status_loc)
 
     def long_password_error_message(self):
-        weak_password_status_loc = (By.XPATH,
-                                    '//span[@data-error="WEAK_PASSWORD"]')
-        moderate_password_status_loc = (By.XPATH,
-                                        '//span[@data-error="ALMOST_THERE"]')
-        # Both waits are needed since yahoo always shows weak password
-        # then moderate password texts before, hopefully, showing the
-        # strong password text.
-        wait(self.driver, 15).until(EC.invisibility_of_element_located(
-                                                     weak_password_status_loc))
-        wait(self.driver, 15).until(EC.invisibility_of_element_located(
-                                                 moderate_password_status_loc))
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
+        password_status_changes_from_Weak = (
+            tools.attribute_changes_in_element(
+                password_status_loc, "data-error", 'WEAK_PASSWORD'))
+        password_status_changes_from_Mod = (
+            tools.attribute_changes_in_element(
+                password_status_loc, "data-error", 'ALMOST_THERE'))
+        #Both of the waits below are needed since thiS dynamic element always
+        #transitions from 'WEAK_PASSWORD' to 'ALMOST_THERE' and then hopefully
+        #to 'STRONG_PASSWORD'
+        try:
+            wait(self.driver, 15).until(password_status_changes_from_Weak)
+            wait(self.driver, 15).until(password_status_changes_from_Mod)
+        except TimeoutException:
+            print("time out error occured because the password status did " +
+                  "not change from weak status to moderate status or moderate "
+                  + "status to strong status")
         return self.driver.find_element(*password_status_loc)
+        """
+        Notes concerning the above waits and My Expected Condition:
+        Creating my EC was necessary because the dynamic element I implemented
+        this EC on does not exist when there are no characters in the password
+        field. I, obviously, can not obtain the element through this data 
+        error attribute value since that value is what I am testing. Also,
+        in the same regard, I couldn't use any selenium ECs that required the
+        text or attribute value again because that is what I am testing.
+        """
 
     # Buttons
 

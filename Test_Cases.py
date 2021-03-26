@@ -19,11 +19,11 @@ class HomePageSetup(unittest.TestCase):
 
 
 class ErrorMessagePasswords(HomePageSetup):
-
-    def random_password(self, length=int):
+    
+    def random_password(self, password_len):
         excluded_password_chars = ['\n', '\t', '\r', '\x0b', '\x0c']
         return tools.generate_random_string(
-                 length, excluded_chars=excluded_password_chars)
+            password_len, excluded_password_chars)
 
     def setUp(self):
         super().setUp()
@@ -34,13 +34,14 @@ class ErrorMessagePasswords(HomePageSetup):
 
     def test_short_password_error_message(self):
         """
-        Confirm that when the password is 8 characters that the resulting
-        error text is "- Your password is too easy to guess."
+        Confirm that when the password is 8 characters that the data
+        error status is "WEAK_PASSWORD" Confirm the resulting error text
+        is "- Your password is too easy to guess."
 
         acceptance criteria
         --------------------
-        -When an 8-character password is entered, the error text
-         exhibit's this is too short of a password.
+        -When an 8 character password is entered, the data error status
+         and the error text exhibit's this is too short of a password.
 
         Note
         --------------------
@@ -50,53 +51,61 @@ class ErrorMessagePasswords(HomePageSetup):
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(length=8))
+        yahoo_page.input_new_password_field(self.random_password(5))
 
+        self.assertEqual(yahoo_page.short_password_error_message().
+                         get_attribute('data-error'), "WEAK_PASSWORD")
         self.assertEqual(yahoo_page.short_password_error_message().text,
                          "- Your password is too easy to guess.")
 
     def test_moderate_password_error_message(self):
         """
-        Confirm that when the password is 9 characters in length, the
-        error text is "- Almost there".
+        Confirm that when the password 9 or 10 characters in length, the
+        error data status is "ALMOST_THERE". Confirm the resulting error
+        text is "- Almost there".
 
         acceptance criteria
         --------------------
-        -When a password that is between 9 characters in lenght is
-         entered, the error text exhibit's this is a moderate length for
-         the password.
+        -When a password that is between 9 and 10 characters is entered,
+         the data error status and the error text exhibit's this is a
+         moderate length for the password.
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(length=9))
+        yahoo_page.input_new_password_field(self.random_password(9))
 
+        self.assertEqual(yahoo_page.moderate_password_error_message().
+                         get_attribute('data-error'), "ALMOST_THERE")
         self.assertEqual(yahoo_page.moderate_password_error_message().text,
                          "- Almost there.")
 
     def test_long_password_error_message(self):
         """
-        Confirm that when the password is 11 characters, the error text
-        is "- you did it!".
+        Confirm that when the password is 11 characters, the error data
+        status is "STRONG_PASSWORD". Confirm the resulting error text is
+        "- you did it!".
 
         acceptance criteria
         --------------------
-        -When a password that is 11 characters is entered the error text
-         either does not exist or it exhibits this is a password of
-         sufficient length.
+        -When a password that is 11 characters is entered, the data
+         error and error text either does not exist or it exhibits this
+         is a password of sufficient length.
         """
         yahoo_page = self.yahoo_page
 
-        yahoo_page.input_new_password_field(self.random_password(length=11))
+        yahoo_page.input_new_password_field(self.random_password(11))
 
+        self.assertEqual(yahoo_page.long_password_error_message().
+                         get_attribute('data-error'), "STRONG_PASSWORD")
         self.assertTrue(yahoo_page.long_password_error_message().text == "" or
                         yahoo_page.long_password_error_message().text == None
                         or yahoo_page.long_password_error_message().text ==
                         "- you did it!", "\n"
                         + yahoo_page.long_password_error_message().text +
                         ' appeared intead of - you did it!')
-        # The assertTrue above is necessary due to the error messaging
-        # returning an empty string, None or a text. Logic operators do
-        # not work within AssertEqual, which is why this assert is different
+        #The assertTrue above is necessary due to the error messaging returning
+        #an empty string, None or a text.
+        #Logic operators do not work within AssertEqual
 
 
 class Search(HomePageSetup):
@@ -129,7 +138,7 @@ class Search(HomePageSetup):
 
 class DynamicDropDown(HomePageSetup):
     """
-    For the Originals drop-down menu within yahoo news; ensure that
+    For the Originals drop down menu within yahoo news; ensure that
     clicking on this drop down's options sends the user to the
     correlating site.
 
@@ -142,12 +151,12 @@ class DynamicDropDown(HomePageSetup):
     def setUp(self):
         super().setUp()
         self.yahoo_page.click_news_link()
-        # Maximize is needed to hover over the originals tab.
+        #Maximize is needed to hover over the originals tab in headed mode.
         self.driver.maximize_window()
         self.yahoo_page.hover_over_originals_drop_down()
 
     def test_any_random_tab(self):
-        # Dictionary of option titles and corresponding block of its URL.
+        #Dictionary of option titles and corresponding url.
         dict_option_title_url_block = {'The 360': '360',
                                        'Skullduggery': 'skullduggery',
                                        'Conspiracyland': 'conspiracyland'}
@@ -200,5 +209,4 @@ class PasswordLink(HomePageSetup):
         self.assertIn('change-password', self.driver.current_url)
 
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__": unittest.main()

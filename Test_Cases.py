@@ -23,7 +23,7 @@ class ErrorMessagePasswords(HomePageSetup):
     def random_password(self, length=int):
         excluded_password_chars = ['\n', '\t', '\r', '\x0b', '\x0c']
         return tools.generate_random_string(
-                 length, excluded_chars=excluded_password_chars)
+                                length, excluded_chars=excluded_password_chars)
 
     def setUp(self):
         super().setUp()
@@ -62,9 +62,8 @@ class ErrorMessagePasswords(HomePageSetup):
 
         acceptance criteria
         --------------------
-        -When a password that is between 9 characters in lenght is
-         entered, the error text exhibit's this is a moderate length for
-         the password.
+        -When a password that is 9 characters in lenght is entered, the
+         error text exhibit's this is a moderate length for the password.
         """
         yahoo_page = self.yahoo_page
 

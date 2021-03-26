@@ -175,7 +175,6 @@ class YahooPage():
         profile_menu_loc = (By.XPATH, '//label[@id="ybarAccountMenuOpener"]')
         wait(self.driver, 15).until(
                             EC.visibility_of_element_located(profile_menu_loc))
-        self.driver.get_screenshot_as_file("screenshot.png")
         profile_menu_element = self.driver.find_element(*profile_menu_loc)
         ActionChains(self.driver).move_to_element(profile_menu_element).perform()
 

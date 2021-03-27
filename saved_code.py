@@ -14,4 +14,14 @@ options.add_argument('--disable-crash-reporter')
 options.add_argument('--enable-crash-reporter')
 #options.add_argument('--font-render-hinting')      #this broke it, created a Resource warning
 
+#In test_cases.py setUp(self)
+from selenium.webdriver.chrome.service import Service  # fix for Selenium 4
+s = Service(Settings.path_to_webdriver)  #selenium 4
+driver = webdriver.Chrome(services=s, options=options)
 
+#get and add user_agent
+user_agent = driver.execute_script("return navigator.userAgent;")
+print(user_agent)
+options.add_argument(f'user-agent={user_agent}')
+
+driver.get_screenshot_as_file("screenshot.png")

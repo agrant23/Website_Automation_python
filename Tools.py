@@ -13,34 +13,35 @@ def generate_random_num(min_range, max_range, excluded_nums=[None]):
 
 # String Manipulation
 
-def generate_random_string(string_len, excluded_chars=str(None)):
+def generate_random_string(length, excluded_chars=str(None)):
     clean_string = re.sub("|".join(excluded_chars), "", string.printable)
     random_string = ''.join(random.choice(clean_string)
-                            for i in range(string_len))
+                            for i in range(length))
     return random_string
 
 
 # Unused Method
 
 # Expected Condition
-"""
-Note: this Expected Condition would return True if the
-previous_attribute_value is None or "". This is obvious but this is
-noteworthy. The waits that use this EC will stil pass or become obsolete
-if the HTTP code no longer changes from one from one attribute value to
-another.
-"""
-def attribute_changes_in_element(
-          locator, attribute_type, previous_attribute_value):
+def attribute_value_is_not(
+          locator, attribute_type, not_attribute_value):
     """
     An expectated condition to check that an attribute's value for a
-    specificed element has changed from the previous_attribute_value
+    element is not a specified attribute_value
+
+    Parameters
+    ----------
+    locator : a tuple used to find the same locator for both the argument's
+              not_attribute_value and method's found attribute_value
+    attribute_type : string of the attribute type for this element
+    not_attribute_value : string of the attribute value that is not the the
+                          value this Expected Condition find's
     """
     def _predicate(driver):
         try:
             attribute_value = driver.find_element(*locator).get_attribute(
                 attribute_type)
-            return attribute_value != previous_attribute_value
+            return attribute_value != not_attribute_value
         except StaleElementReferenceException:
             return False
 
@@ -57,6 +58,8 @@ issue. You may have overlapping elements on the screen that mask the
 element you are targeting. Good for diagnosing an element that is
 not clicking.
 """
+
+
 def highlight(element):
     driver = element._parent
 

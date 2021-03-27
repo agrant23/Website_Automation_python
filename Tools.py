@@ -20,9 +20,8 @@ def generate_random_string(length, excluded_chars=str(None)):
     return random_string
 
 
-# Unused Method
-
 # Expected Condition
+
 def attribute_value_is_not(
           locator, attribute_type, not_attribute_value):
     """

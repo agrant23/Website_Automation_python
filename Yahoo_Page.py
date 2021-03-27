@@ -52,7 +52,7 @@ class YahooPage():
         #Here I use my tool to get the expected condition that the 'data-error'
         #attribute value is not 'WEAK_PASSWORD'
         password_status_changes_from_Weak = (
-            tools.attribute_changes_in_element(
+            tools.attribute_value_is_not(
                 password_status_loc, "data-error", 'WEAK_PASSWORD'))
         #Because the 'data-error' element is dynamic and always changes from
         #'Weak_PASSWORD' to 'ALMOST_THERE' the wait below is needed to wait
@@ -69,10 +69,10 @@ class YahooPage():
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
         password_status_changes_from_Weak = (
-            tools.attribute_changes_in_element(
+            tools.attribute_value_is_not(
                 password_status_loc, "data-error", 'WEAK_PASSWORD'))
         password_status_changes_from_Mod = (
-            tools.attribute_changes_in_element(
+            tools.attribute_value_is_not(
                 password_status_loc, "data-error", 'ALMOST_THERE'))
         #Both of the waits below are needed since thiS dynamic element always
         #transitions from 'WEAK_PASSWORD' to 'ALMOST_THERE' and then hopefully

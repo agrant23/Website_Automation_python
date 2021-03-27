@@ -3,6 +3,5 @@ __pycache__
 Secure.py
 sandbox.py
 .env
-.settings.json
-.vscode
 .vscode/settings.json
+selenium/

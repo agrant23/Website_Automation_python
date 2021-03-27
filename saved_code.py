@@ -1,5 +1,9 @@
 #Saved code
 
+from selenium import webdriver
+import settings
+from yahoo_page import *
+options = YahooPage.option
 #unused Chrome commands thinking it will help with headless
 
 options.add_argument('--no-sandbox')
@@ -16,7 +20,7 @@ options.add_argument('--enable-crash-reporter')
 
 #In test_cases.py setUp(self)
 from selenium.webdriver.chrome.service import Service  # fix for Selenium 4
-s = Service(Settings.path_to_webdriver)  #selenium 4
+s = Service(settings.path_to_webdriver)  #selenium 4
 driver = webdriver.Chrome(services=s, options=options)
 
 #get and add user_agent

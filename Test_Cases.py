@@ -4,7 +4,7 @@ from selenium import webdriver
 import unittest
 from Yahoo_Page import YahooPage
 import Tools as tools
-import settings
+import Settings as settings
 import time
 
 

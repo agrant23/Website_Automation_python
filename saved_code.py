@@ -13,3 +13,5 @@ options.add_argument('--disable-crash-reporter')
 #options.add_argument('--dump-dom')                 #this broke it, created a Resource warning
 options.add_argument('--enable-crash-reporter')
 #options.add_argument('--font-render-hinting')      #this broke it, created a Resource warning
+
+

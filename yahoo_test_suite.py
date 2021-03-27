@@ -1,5 +1,5 @@
 import unittest
-import Test_Cases as test_case
+import test_cases as test_case
 
 
 suite = unittest.TestSuite()

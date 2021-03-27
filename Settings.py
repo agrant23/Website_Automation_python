@@ -1,5 +1,5 @@
 import secure
-# replace your path with the Secure path below
+# replace your path with the secure.path_to_adBlock and secure.path_to_webDriver
 
 path_to_adBlock = secure.path_to_adBlock + r"\Resources\adblocker\3.9_0"
 path_to_webdriver = (

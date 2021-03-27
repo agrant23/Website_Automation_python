@@ -14,7 +14,7 @@ import Tools as tools
 class YahooPage():
 
     options = Options()
-    # options.add_argument('headless')
+    options.add_argument('headless')
     # adblocker extension is needed to hide ads that obscured elements
     options.add_argument('load-extension=' + settings.path_to_adBlock)
     # option below ignores the DevTools output from ChromiumDeiver of Selenium

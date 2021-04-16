@@ -16,7 +16,7 @@ class YahooPage():
     # Through screenshots I know that when in headless mode the yahoo anti-bot
     # detection stops naviagtion. Though the repo run's often, error free in
     # headless mode, to run completely error free you must disable headless mode
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     # adblocker extension is needed to hide ads that obscured elements
     options.add_argument('load-extension=' + settings.path_to_adBlock)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -165,7 +165,7 @@ class YahooPage():
         wait(self.driver, 10).until(EC.url_changes('yahoo.com'))
         current_tab = self.driver.current_window_handle
         # time.sleep(2) is needed to give the pop up time to appear. Outside of
-        # using drop box extensions this is the only way to handle this.
+        # using a pop up selenium tool this is the only way to handle this.
         time.sleep(2)
         self.driver.switch_to.window(current_tab)
 

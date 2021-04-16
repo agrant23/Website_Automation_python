@@ -23,9 +23,11 @@ from selenium.webdriver.chrome.service import Service  # fix for Selenium 4
 s = Service(settings.path_to_webdriver)  #selenium 4
 driver = webdriver.Chrome(services=s, options=options)
 
-#get and add user_agent
+#get user_agent
 user_agent = driver.execute_script("return navigator.userAgent;")
 print(user_agent)
+#add in a user agent
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
 options.add_argument(f'user-agent={user_agent}')
 
 driver.get_screenshot_as_file("screenshot.png")

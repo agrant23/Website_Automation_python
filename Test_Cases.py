@@ -3,7 +3,6 @@ import unittest
 from yahoo_page import YahooPage
 import tools
 import settings
-import time
 
 
 class HomePageSetup(unittest.TestCase):

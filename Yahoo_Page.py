@@ -49,8 +49,8 @@ class YahooPage():
     def moderate_password_error_message(self):
         password_status_loc = (
             By.XPATH, '//span[contains(@id,"error-password-msg")]')
-        #Here I use my tool to get the expected condition that the 'data-error'
-        #attribute value is not 'WEAK_PASSWORD'
+        #Here I use my expected condition to get the expected condition;
+        #that the 'data-error' attribute value is not 'WEAK_PASSWORD'
         password_status_changes_from_Weak = (
             tools.attribute_value_is_not(
                 password_status_loc, "data-error", 'WEAK_PASSWORD'))

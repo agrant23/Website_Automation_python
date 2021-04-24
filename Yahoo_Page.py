@@ -165,7 +165,7 @@ class YahooPage():
         wait(self.driver, 10).until(EC.url_changes('yahoo.com'))
         current_tab = self.driver.current_window_handle
         # time.sleep(2) is needed to give the pop up time to appear. Outside of
-        # using a pop up selenium tool this is the only way to handle this.
+        # using a pop up selenium tool is the only way to handle this.
         time.sleep(2)
         self.driver.switch_to.window(current_tab)
 

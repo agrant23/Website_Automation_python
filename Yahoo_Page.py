@@ -16,7 +16,7 @@ class YahooPage():
     # Through screenshots I know that when in headless mode the yahoo anti-bot
     # detection stops naviagtion. Though the repo run's often, error free in
     # headless mode, to run completely error free you must disable headless mode
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     # adblocker extension is needed to hide ads that obscured elements
     options.add_argument('load-extension=' + settings.path_to_adBlock)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])

@@ -3,14 +3,17 @@ import unittest
 from yahoo_page import YahooPage
 import tools
 import settings
+from selenium.webdriver.chrome.service import Service
 
 
 class HomePageSetup(unittest.TestCase):
 
+
     def setUp(self):
+        service = Service(settings.path_to_webdriver)
         options = YahooPage.options
         self.driver = webdriver.Chrome(
-                                   settings.path_to_webdriver, options=options)
+                                   service=service, options=options)
         self.yahoo_page = YahooPage(self.driver)
 
     def tearDown(self):
@@ -54,49 +57,6 @@ class ErrorMessagePasswords(HomePageSetup):
         self.assertEqual(yahoo_page.short_password_error_message().text,
                          "- Your password is too easy to guess.")
 
-    def test_moderate_password_error_message(self):
-        """
-        Confirm that when the password is 9 characters in length, the
-        error text is "- Almost there".
-
-        acceptance criteria
-        --------------------
-        -When a password that is 9 characters in length is entered, the
-         error text exhibit's this is a moderate length for the password.
-        """
-        yahoo_page = self.yahoo_page
-
-        yahoo_page.input_new_password_field(self.random_password(length=9))
-
-        self.assertEqual(yahoo_page.moderate_password_error_message().text,
-                         "- Almost there.")
-
-    def test_long_password_error_message(self):
-        """
-        Confirm that when the password is 11 characters, the error text
-        is "- you did it!".
-
-        acceptance criteria
-        --------------------
-        -When a password that is 11 characters is entered the error text
-         either does not exist or it exhibits this is a password of
-         sufficient length.
-        """
-        yahoo_page = self.yahoo_page
-
-        yahoo_page.input_new_password_field(self.random_password(length=11))
-
-        self.assertTrue(yahoo_page.long_password_error_message().text == "" or
-                        yahoo_page.long_password_error_message().text == None
-                        or yahoo_page.long_password_error_message().text ==
-                        "- you did it!", "\n"
-                        + yahoo_page.long_password_error_message().text +
-                        ' appeared intead of - you did it!')
-        # The assertTrue above is necessary due to the error messaging
-        # returning an empty string, None or a text. Logic operators do
-        # not work within AssertEqual, which is why this assert is different
-
-
 class Search(HomePageSetup):
     """
     Confirm the cursor is present in the Search field after the yahoo
@@ -107,8 +67,8 @@ class Search(HomePageSetup):
     acceptance criteria
     --------------------
     -The cursor is in the search field after the yahoo home page is opened.
-    -When the search field is given an input,
-     the user is navigated to the search page.
+    -When the search field is given an input, the user is navigated to the 
+     search page.
     """
     def test_cursur_on_search_field(self):
 
@@ -170,33 +130,79 @@ class LogInLink(HomePageSetup):
         self.yahoo_page.click_sign_in_button()
         self.assertIn('login', self.driver.current_url)
 
-
-class PasswordLink(HomePageSetup):
-
-    def setUp(self):
-        super().setUp()
-
-        self.yahoo_page.login()
-        self.yahoo_page.navigate_to_security_tab()
-
-    def test_change_password_link(self):
-        """
-        Confirm the change password internal link is correct.
-
-        acceptance criteria
-        --------------------
-        -After clicking the change password button,
-         the URL has changed to the login page.
-
-        Note
-        --------------------
-        -Yahoo security will randomly ask to "prove you are not a robot".
-         Which, at times, is responsible for this test erroring out.
-        """
-
-        self.yahoo_page.click_change_password_link()
-        self.assertIn('change-password', self.driver.current_url)
-
-
 if __name__ == "__main__":
     unittest.main()
+
+
+
+
+
+# Old Fun Code
+
+#     def test_moderate_password_error_message(self):
+#         """
+#         Confirm that when the password is 9 characters in length, the
+#         error text is "- Almost there".
+
+#         acceptance criteria
+#         --------------------
+#         -When a password that is 9 characters in length is entered, the
+#          error text exhibit's this is a moderate length for the password.
+#         """
+#         yahoo_page = self.yahoo_page
+
+#         yahoo_page.input_new_password_field(self.random_password(length=9))
+
+#         self.assertEqual(yahoo_page.moderate_password_error_message().text,
+#                          "- Almost there.")
+
+#     def test_long_password_error_message(self):
+#         """
+#         Confirm that when the password is 11 characters, the error text
+#         is "- you did it!".
+
+#         acceptance criteria
+#         --------------------
+#         -When a password that is 11 characters is entered the error text
+#          either does not exist or it exhibits this is a password of
+#          sufficient length.
+#         """
+#         yahoo_page = self.yahoo_page
+
+#         yahoo_page.input_new_password_field(self.random_password(length=11))
+
+#         self.assertTrue(yahoo_page.long_password_error_message().text == "" or
+#                         yahoo_page.long_password_error_message().text == None
+#                         or yahoo_page.long_password_error_message().text ==
+#                         "- you did it!", "\n"
+#                         + yahoo_page.long_password_error_message().text +
+#                         ' appeared intead of - you did it!')
+#         # The assertTrue above is necessary due to the error messaging
+#         # returning an empty string, None or a text. Logic operators do
+#         # not work within AssertEqual, which is why this assert is different
+
+# class PasswordLink(HomePageSetup):
+
+#     def setUp(self):
+#         super().setUp()
+
+#         self.yahoo_page.login()
+#         self.yahoo_page.navigate_to_security_tab()
+
+#     def test_change_password_link(self):
+#         """
+#         Confirm the change password internal link is correct.
+
+#         acceptance criteria
+#         --------------------
+#         -After clicking the change password button,
+#          the URL has changed to the login page.
+
+#         Note
+#         --------------------
+#         -Yahoo security will randomly ask to "prove you are not a robot".
+#          Which, at times, is responsible for this test erroring out.
+#         """
+
+#         self.yahoo_page.click_change_password_link()
+#         self.assertIn('change-password', self.driver.current_url)

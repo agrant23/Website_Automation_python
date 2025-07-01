@@ -26,7 +26,7 @@ def generate_random_string(length, excluded_chars=str(None)):
 def attribute_value_is_not(
           locator, attribute_type, not_attribute_value):
     """
-    An expectated condition to check that an attribute's value for a
+    An expected condition to check that an attribute's value for a
     element is not a specified attribute_value
 
     Parameters

@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 import settings
 import time
 import tools
@@ -16,7 +18,7 @@ class YahooPage():
     # Through screenshots I know that when in headless mode the yahoo anti-bot
     # detection stops naviagtion. Though the repo run's error free often in
     # headless mode, to run completely error free you must disable headless mode
-    options.add_argument('--headless')
+    #options.add_argument('--headless')
     # adblocker extension is needed to hide ads that obscured elements
     options.add_argument('load-extension=' + settings.path_to_adBlock)
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -45,36 +47,6 @@ class YahooPage():
         password_status_element = wait(self.driver, 15).until(
             EC.presence_of_element_located(password_status_loc))
         return password_status_element
-
-    def moderate_password_error_message(self):
-        weak_password_status_loc = (By.XPATH,
-                                    '//span[@data-error="WEAK_PASSWORD"]')
-        # the wait below is necessary since yahoo always shows the weak
-        # passord text before the moderate password text. I Made My Own
-        # explicit wait, for this problem, that can be seen in the
-        # diff_explicit_wait_ErrorMessagePassword branch. In README.txt
-        # there are more notes on the pros and cons of these two solutions
-        wait(self.driver, 15).until(EC.invisibility_of_element_located(
-                                                     weak_password_status_loc))
-        password_status_loc = (
-            By.XPATH, '//span[contains(@id,"error-password-msg")]')
-        return self.driver.find_element(*password_status_loc)
-
-    def long_password_error_message(self):
-        weak_password_status_loc = (By.XPATH,
-                                    '//span[@data-error="WEAK_PASSWORD"]')
-        moderate_password_status_loc = (By.XPATH,
-                                        '//span[@data-error="ALMOST_THERE"]')
-        # Both waits are needed since yahoo always shows weak password
-        # then moderate password texts before, hopefully, showing the
-        # strong password text.
-        wait(self.driver, 15).until(EC.invisibility_of_element_located(
-                                                     weak_password_status_loc))
-        wait(self.driver, 15).until(EC.invisibility_of_element_located(
-                                                 moderate_password_status_loc))
-        password_status_loc = (
-            By.XPATH, '//span[contains(@id,"error-password-msg")]')
-        return self.driver.find_element(*password_status_loc)
 
     # Buttons
 
@@ -249,3 +221,25 @@ class YahooPage():
     def switch_to_yahoo_window_tab(self):
         yahoo_window = self.driver.current_window_handle
         self.driver.switch_to.window(yahoo_window)
+
+
+
+
+
+# Outdated code, that was fun
+
+    # def long_password_error_message(self):
+    #     weak_password_status_loc = (By.XPATH,
+    #                                 '//span[@data-error="WEAK_PASSWORD"]')
+    #     moderate_password_status_loc = (By.XPATH,
+    #                                     '//span[@data-error="ALMOST_THERE"]')
+    #     # Both waits are needed since yahoo always shows weak password
+    #     # then moderate password texts before, hopefully, showing the
+    #     # strong password text.
+    #     wait(self.driver, 15).until(EC.invisibility_of_element_located(
+    #                                                  weak_password_status_loc))
+    #     wait(self.driver, 15).until(EC.invisibility_of_element_located(
+    #                                              moderate_password_status_loc))
+    #     password_status_loc = (
+    #         By.XPATH, '//span[contains(@id,"error-password-msg")]')
+    #     return self.driver.find_element(*password_status_loc)

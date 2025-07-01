@@ -21,7 +21,8 @@ In this instance I created a python testing environment, there I remotely connec
             yahoo_password = 'Your Password'
 
 •   Create a directory called "Website_Automation_python". In this directory you need to set up your own Python enabled IDE or text editor.
-        You can create a python virtual environment if convenient by using the command: 
+        You can create a python virtual environment if convenient by using the command:
+        
             For Windows:
             python -m venv project_name.py
             For macOS/Linux:

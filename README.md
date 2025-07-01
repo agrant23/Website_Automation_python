@@ -12,6 +12,7 @@ I created an ec2 Linux server environment (also called an Amazon Web Service Ins
 In this instance I created a python testing environment, there I remotely connected to my repository, pulled in this Repo and successfully tested the code.
     This testing environment required an IDE shell, with packages, the WebDriver, setting up multiple paths, and more. This was a great into into working with the Linux environment.
 
+
 ## To Run
 •   You need to create a yahoo account and copy your username and password into the variables provided in the settings.py file.
     You may need to login, logout and login again, manually to avoid anti-bot security from being present for the testing of this repo.
@@ -22,7 +23,7 @@ In this instance I created a python testing environment, there I remotely connec
 
 •   Create a directory called "Website_Automation_python". In this directory you need to set up your own Python enabled IDE or text editor.
         You can create a python virtual environment if convenient by using the command:
-        
+
             For Windows:
             python -m venv project_name.py
             For macOS/Linux:
@@ -35,6 +36,7 @@ In this instance I created a python testing environment, there I remotely connec
         python yahoo_test_suite.py 
 
 This works on Windows, Linux, and Mac OSs using Python 3.9, and Selenium 3.141.
+
 
 ## Notes
 •   The Password_Link and Error_Message_Passwords test Cases can error after multiple runs due to the anti-bot security checks. 

@@ -10,7 +10,6 @@ The Repository https://github.com/agrant23/CsharpFrameWork exhibits improved cod
 I tested this on Mac and Window Operating Systems. 
 I created an Amazon EC2 instance in the AWS cloud environment. I connected to this instance via ssh using Linux. 
 In this cloud environment I set up a python virtual environment where I pulled in my QA repository from Github and successfully ran and passed my test suite.
-This was a great into into working with the Linux environment.
 
 
 ## To Run

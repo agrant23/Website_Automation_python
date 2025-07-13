@@ -7,32 +7,36 @@ This repository is PEP8 compliant, exhibits code modularity, its structure adher
 
 The Repository https://github.com/agrant23/CsharpFrameWork exhibits improved code modularity, it adheres more to the POM
 
-I tested this on Mac and Window OSs. 
-I created an ec2 Linux server environment (also called an Amazon Web Service Instance). I configured the AWS's security system manually, as it was free.
-In this instance I created a python testing environment, there I remotely connected to my repository, pulled in this Repo and successfully tested the code.
-    This testing environment required an IDE shell, with packages, the WebDriver, setting up multiple paths, and more. This was a great into into working with the Linux environment.
+I tested this on Mac and Window Operating Systems. 
+I created an Amazon EC2 instance in the AWS cloud environment. I connected to this instance via ssh using Linux. 
+In this cloud environment I set up a python virtual environment where I pulled in my QA repository from Github and successfully ran and passed my test suite.
+This was a great into into working with the Linux environment.
 
 
 ## To Run
-•   You need to create a yahoo account and copy your username and password into the variables provided in the settings.py file.
-    You may need to login, logout and login again, manually to avoid anti-bot security from being present for the testing of this repo.
-        
-        You can utilize the .gitignore file and create the "secure.py" file. In this file, fill in the code below: 
+1.  You need to create a yahoo account and copy your username and password into the variables provided in the settings.py file.
+    You may need to login, logout and login again, manually to avoid anti-bot security. Also can manually navigate through yahoo security during navigation.
+        If you want to.
+        You can utilize the .gitignore file and create the "secure.py" file In this Repository, and fill in the code below: 
             yahoo_username = 'Your User Name@yahoo.com'
             yahoo_password = 'Your Password'
 
-•   Create a directory called "Website_Automation_python". In this directory you need to set up your own Python enabled IDE or text editor.
-        You can create a python virtual environment if convenient by using the command:
+2.  Create a directory called "Website_Automation_python". 
+    You need to set up your own Python equiped IDE or text editor.
+        You can create a python virtual environment if convenient by using the command:s
 
             For Windows:
             python -m venv project_name.py
+            pip install selenium
+
             For macOS/Linux:
             $ python -m venv myfirstproject
+            $ pip install selenium
 
-•   With Git Bash navigate to the above directory and run:
+3.  With Git Bash navigate to the above directory and run:
         git clone git@github.com:agrant23/Website_Automation_python.git
 
-•   With an OS command prompt navigate to this same directory and run:
+4.  With an OS command prompt navigate to this same directory and run:
         python yahoo_test_suite.py 
 
 This works on Windows, Linux, and Mac OSs using Python 3.9, and Selenium 3.141.
